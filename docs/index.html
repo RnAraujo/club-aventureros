@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Club de Conquistadores Pléyades</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bg: '#0a0f1a',
+                        fg: '#e8e6e3',
+                        muted: '#7a8599',
+                        accent: '#d4a03c',
+                        accentLight: '#f4c564',
+                        card: 'rgba(18, 26, 42, 0.85)',
+                        border: 'rgba(212, 160, 60, 0.25)',
+                        forest: '#1a3d2e',
+                        forestLight: '#2d5a45',
+                    },
+                    fontFamily: {
+                        display: ['Bebas Neue', 'sans-serif'],
+                        body: ['Source Sans 3', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            background-color: #0a0f1a;
+            color: #e8e6e3;
+            overflow-x: hidden;
+        }
+
+        .font-display {
+            font-family: 'Bebas Neue', sans-serif;
+        }
+
+        /* Animated background */
+        .hero-bg {
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(26, 61, 46, 0.4) 0%, transparent 50%),
+                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(212, 160, 60, 0.08) 0%, transparent 40%),
+                radial-gradient(ellipse 50% 30% at 20% 80%, rgba(45, 90, 69, 0.15) 0%, transparent 40%),
+                linear-gradient(180deg, #0a0f1a 0%, #0d1420 50%, #0a0f1a 100%);
+        }
+
+        /* Stars */
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(232, 230, 227, 0.6);
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite;
+            animation-delay: var(--delay);
+        }
+
+        .star.bright {
+            width: 3px;
+            height: 3px;
+            background: rgba(244, 197, 100, 0.8);
+            box-shadow: 0 0 6px rgba(244, 197, 100, 0.5);
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Entrance animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Staggered delays */
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+        .delay-4 { transition-delay: 0.4s; }
+        .delay-5 { transition-delay: 0.5s; }
+        .delay-6 { transition-delay: 0.6s; }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            .reveal {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+            .star {
+                animation: none;
+                opacity: 0.6;
+            }
+        }
+
+        /* Card hover effect */
+        .info-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(212, 160, 60, 0.15);
+        }
+
+        /* Button styles */
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 30px rgba(212, 160, 60, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        /* Discount pulse */
+        .discount-badge {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(212, 160, 60, 0.3); }
+            50% { box-shadow: 0 0 35px rgba(212, 160, 60, 0.5); }
+        }
+
+        /* Contact card hover */
+        .contact-card {
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .contact-card:hover {
+            border-color: rgba(212, 160, 60, 0.3);
+            background: rgba(26, 61, 46, 0.3);
+        }
+
+        /* Campfire animation */
+        .campfire {
+            filter: drop-shadow(0 0 10px rgba(212, 160, 60, 0.4));
+        }
+
+        /* Floating animation for hero elements */
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #d4a03c 0%, #f4c564 50%, #d4a03c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Info icon container */
+        .icon-container {
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover .icon-container {
+            transform: scale(1.1);
+            background: rgba(212, 160, 60, 0.2);
+        }
+
+        /* Focus styles */
+        a:focus-visible, button:focus-visible {
+            outline: 2px solid #d4a03c;
+            outline-offset: 2px;
+        }
+
+        /* Include item hover */
+        .include-item {
+            transition: all 0.3s ease;
+        }
+
+        .include-item:hover {
+            transform: translateX(8px);
+            background: rgba(212, 160, 60, 0.08);
+        }
+
+        .include-item:hover .include-icon {
+            background: rgba(212, 160, 60, 0.2);
+            transform: scale(1.1);
+        }
+
+        .include-icon {
+            transition: all 0.3s ease;
+        }
+
+        /* Price card special styling */
+        .price-card {
+            background: linear-gradient(135deg, rgba(26, 61, 46, 0.6) 0%, rgba(45, 90, 69, 0.3) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(212, 160, 60, 0.1) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        /* Decorative line */
+        .deco-line {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(212, 160, 60, 0.5), transparent);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Stars Background -->
+    <div class="stars fixed inset-0" id="stars"></div>
+
+    <!-- Main Content -->
+    <main class="relative z-10">
+        <!-- Hero Section -->
+        <section class="hero-bg min-h-screen flex flex-col items-center justify-center px-4 py-16 relative">
+            <!-- Decorative top element -->
+            <div class="absolute top-8 left-1/2 -translate-x-1/2 w-px h-20 bg-gradient-to-b from-transparent via-accent/50 to-transparent"></div>
+            
+            <div class="text-center max-w-4xl mx-auto">
+                <!-- Badge -->
+                <div class="reveal delay-1 inline-flex items-center gap-2 px-4 py-2 rounded-full border border-accent/30 bg-card mb-8">
+                    <svg class="w-4 h-4 text-accent" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                    </svg>
+                    <span class="text-sm font-semibold tracking-wider uppercase text-accent">Invitacion Especial</span>
+                </div>
+
+                <!-- Main Title -->
+                <h1 class="reveal delay-2 font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl tracking-wide mb-4">
+                    <span class="text-fg">CLUB DE</span><br>
+                    <span class="gradient-text">CONQUISTADORES</span><br>
+                    <span class="text-fg">PLEYADES</span>
+                </h1>
+
+                <!-- Subtitle -->
+                <p class="reveal delay-3 text-lg sm:text-xl text-muted max-w-2xl mx-auto mb-12 leading-relaxed">
+                    Un espacio donde ninos y adolescentes crecen en valores, disciplina, amistad y fe, a traves de actividades recreativas, campanamientos, clases y servicio.
+                </p>
+
+                <!-- Campfire Icon -->
+                <div class="reveal delay-4 float campfire mb-12">
+                    <svg class="w-16 h-16 mx-auto text-accent" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.467 5.99 5.99 0 0 0-1.925 3.547 5.975 5.975 0 0 1-2.133-1.001A3.75 3.75 0 0 0 12 18Z"/>
+                    </svg>
+                </div>
+
+                <!-- CTA Button -->
+                <a href="#inscripcion" class="reveal delay-5 btn-primary inline-flex items-center gap-3 px-8 py-4 bg-accent text-bg font-bold text-lg rounded-lg">
+                    <span>Quiero Unirme</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3"/>
+                    </svg>
+                </a>
+            </div>
+
+            <!-- Scroll indicator -->
+            <div class="absolute bottom-8 left-1/2 -translate-x-1/2">
+                <div class="w-6 h-10 border-2 border-muted/50 rounded-full flex justify-center pt-2">
+                    <div class="w-1 h-2 bg-accent rounded-full animate-bounce"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Event Details Section -->
+        <section class="py-20 px-4 relative">
+            <div class="max-w-6xl mx-auto">
+                <!-- Section Header -->
+                <div class="text-center mb-16">
+                    <h2 class="reveal font-display text-4xl sm:text-5xl md:text-6xl text-fg tracking-wide mb-4">
+                        GRAN APERTURA
+                    </h2>
+                    <div class="reveal delay-1 w-24 h-1 bg-accent mx-auto rounded-full"></div>
+                </div>
+
+                <!-- Info Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                    <!-- Date Card -->
+                    <div class="reveal delay-1 info-card bg-card backdrop-blur-sm rounded-2xl p-8 border border-border">
+                        <div class="icon-container w-14 h-14 rounded-xl bg-forest/50 flex items-center justify-center mb-6">
+                            <svg class="w-7 h-7 text-accent" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"/>
+                            </svg>
+                        </div>
+                        <p class="text-muted text-sm uppercase tracking-wider mb-2">Fecha</p>
+                        <p class="font-display text-3xl text-fg">21 DE FEBRERO</p>
+                    </div>
+
+                    <!-- Location Card -->
+                    <div class="reveal delay-2 info-card bg-card backdrop-blur-sm rounded-2xl p-8 border border-border">
+                        <div class="icon-container w-14 h-14 rounded-xl bg-forest/50 flex items-center justify-center mb-6">
+                            <svg class="w-7 h-7 text-accent" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"/>
+                            </svg>
+                        </div>
+                        <p class="text-muted text-sm uppercase tracking-wider mb-2">Lugar</p>
+                        <p class="font-display text-3xl text-fg">IASD CENTRAL</p>
+                    </div>
+
+                    <!-- Price Card -->
+                    <div class="reveal delay-3 info-card price-card rounded-2xl p-8 border border-accent/30 md:col-span-2 lg:col-span-1">
+                        <div class="icon-container w-14 h-14 rounded-xl bg-accent/20 flex items-center justify-center mb-6">
+                            <svg class="w-7 h-7 text-accent" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z"/>
+                            </svg>
+                        </div>
+                        <p class="text-muted text-sm uppercase tracking-wider mb-2">Costo con descuento</p>
+                        <p class="font-display text-4xl text-accent mb-1">S/ 35</p>
+                        <p class="text-muted text-xs">Precio regular: S/ 50</p>
+                    </div>
+                </div>
+
+                <!-- Discount Banner -->
+                <div class="reveal discount-badge bg-gradient-to-r from-forest via-forestLight to-forest rounded-2xl p-6 md:p-8 border border-accent/30 relative overflow-hidden mb-16">
+                    <!-- Decorative elements -->
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-accent/5 rounded-full blur-3xl"></div>
+                    <div class="absolute bottom-0 left-0 w-48 h-48 bg-accent/5 rounded-full blur-2xl"></div>
+                    
+                    <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+                        <div class="flex items-center gap-5">
+                            <div class="w-16 h-16 rounded-2xl bg-accent/20 flex items-center justify-center flex-shrink-0">
+                                <span class="font-display text-3xl text-accent">10%</span>
+                            </div>
+                            <div>
+                                <p class="text-accent font-semibold text-lg mb-1">Descuento Especial</p>
+                                <p class="text-fg/80">Valido hasta el <span class="font-bold text-fg">9 de febrero</span></p>
+                            </div>
+                        </div>
+                        <div class="text-center md:text-right">
+                            <p class="text-muted text-sm">Despues de esa fecha</p>
+                            <p class="text-fg">Costo regular: <span class="font-bold">S/ 50</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- What's Included Section -->
+                <div class="reveal">
+                    <div class="text-center mb-10">
+                        <h3 class="font-display text-3xl sm:text-4xl text-fg tracking-wide mb-3">
+                            LA INSCRIPCION INCLUYE
+                        </h3>
+                        <div class="deco-line w-32 mx-auto"></div>
+                    </div>
+
+                    <div class="bg-card backdrop-blur-sm rounded-2xl border border-border overflow-hidden">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                            <!-- Seguro -->
+                            <div class="include-item p-6 flex items-center gap-4 border-b sm:border-r border-border">
+                                <div class="include-icon w-12 h-12 rounded-xl bg-forest/50 flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-fg font-semibold">Seguro</p>
+                                    <p class="text-muted text-sm">Protección durante actividades</p>
+                                </div>
+                            </div>
+
+                            <!-- Cuadernillo -->
+                            <div class="include-item p-6 flex items-center gap-4 border-b lg:border-r border-border">
+                                <div class="include-icon w-12 h-12 rounded-xl bg-forest/50 flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-fg font-semibold">Cuadernillo de clase</p>
+                                    <p class="text-muted text-sm">Material de estudio</p>
+                                </div>
+                            </div>
+
+                            <!-- Folder -->
+                            <div class="include-item p-6 flex items-center gap-4 border-b sm:border-r lg:border-r-0 border-border">
+                                <div class="include-icon w-12 h-12 rounded-xl bg-forest/50 flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-fg font-semibold">Folder</p>
+                                    <p class="text-muted text-sm">Organización de materiales</p>
+                                </div>
+                            </div>
+
+                            <!-- Pin -->
+                            <div class="include-item p-6 flex items-center gap-4 border-b sm:border-b-0 border-border sm:border-r-0 lg:border-r border-border">
+                                <div class="include-icon w-12 h-12 rounded-xl bg-forest/50 flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-fg font-semibold">Pin de clase</p>
+                                    <p class="text-muted text-sm">Insignia identificativa</p>
+                                </div>
+                            </div>
+
+                            <!-- Libro del año -->
+                            <div class="include-item p-6 flex items-center gap-4 sm:col-span-2 lg:col-span-1">
+                                <div class="include-icon w-12 h-12 rounded-xl bg-forest/50 flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-fg font-semibold">Libro del año</p>
+                                    <p class="text-muted text-sm">Lectura espiritual</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Registration Section -->
+        <section id="inscripcion" class="py-20 px-4 relative">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="reveal font-display text-4xl sm:text-5xl md:text-6xl text-fg tracking-wide mb-4">
+                        INSCRIPCIONES
+                    </h2>
+                    <p class="reveal delay-1 text-muted text-lg max-w-xl mx-auto">
+                        Asegura tu lugar en la aventura. Con tu inscripcion garantizamos la correcta organizacion del club durante todo el año.
+                    </p>
+                </div>
+
+                <!-- Contact Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
+                    <!-- Registration Contact -->
+                    <a href="tel:918941558" class="reveal delay-1 contact-card bg-card backdrop-blur-sm rounded-2xl p-6 flex items-center gap-4 group">
+                        <div class="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center flex-shrink-0 group-hover:bg-accent/20 transition-colors">
+                            <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-muted text-sm mb-1">Inscripciones</p>
+                            <p class="font-display text-2xl text-fg group-hover:text-accent transition-colors">918 941 558</p>
+                        </div>
+                    </a>
+
+                    <!-- Secretary Contact -->
+                    <a href="tel:924711692" class="reveal delay-2 contact-card bg-card backdrop-blur-sm rounded-2xl p-6 flex items-center gap-4 group">
+                        <div class="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center flex-shrink-0 group-hover:bg-accent/20 transition-colors">
+                            <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 0 1-.825-.242m9.345-8.334a2.126 2.126 0 0 0-.476-.095 48.64 48.64 0 0 0-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0 0 11.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-muted text-sm mb-1">Secretaria - Johan Pino</p>
+                            <p class="font-display text-2xl text-fg group-hover:text-accent transition-colors">924 711 692</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Treasury Info -->
+                <div class="reveal delay-3 bg-card backdrop-blur-sm rounded-2xl p-6 border border-border text-center">
+                    <p class="text-muted text-sm mb-2">Tesoreria</p>
+                    <p class="font-display text-2xl text-fg">Liz Jennifer</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="py-12 px-4 border-t border-border/30">
+            <div class="max-w-4xl mx-auto text-center">
+                <div class="flex items-center justify-center gap-3 mb-6">
+                    <svg class="w-8 h-8 text-accent" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z"/>
+                    </svg>
+                    <span class="font-display text-2xl text-fg">PLEYADES</span>
+                </div>
+                <p class="text-muted mb-2">Los esperamos para vivir juntos una gran aventura</p>
+                <p class="text-accent font-semibold">Club de Conquistadores Pleyades</p>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        // Generate stars
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            if (!starsContainer) return;
+            
+            const starCount = 80;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star' + (Math.random() > 0.85 ? ' bright' : '');
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.setProperty('--duration', (2 + Math.random() * 3) + 's');
+                star.style.setProperty('--delay', (Math.random() * 5) + 's');
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Intersection Observer for reveal animations
+        function initRevealAnimations() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            document.querySelectorAll('.reveal').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Smooth scroll for anchor links
+        function initSmoothScroll() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+
+        // Check for reduced motion preference
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!prefersReducedMotion) {
+                createStars();
+            }
+            initRevealAnimations();
+            initSmoothScroll();
+        });
+    </script>
+</body>
+</html>
