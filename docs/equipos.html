@@ -374,14 +374,14 @@
       </div>
       <div class="cta-card-body">
         <p>Descarga la ficha oficial, completa los datos de tu equipo y jugadores, y envíala al WhatsApp de la comisión antes del cierre de inscripciones.</p>
-        <button class="btn-download" onclick="downloadFicha()">
+        <a class="btn-download" href="documents/ficha_inscripcion.pdf" target="_blank">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
             <polyline points="7 10 12 15 17 10"/>
             <line x1="12" y1="15" x2="12" y2="3"/>
           </svg>
           Descargar Ficha PDF
-        </button>
+        </a>
       </div>
     </div>
 
@@ -396,12 +396,7 @@
 // ── DATOS DE EQUIPOS (ejemplo — reemplazar con datos reales) ──
 const TEAMS = [
   { name: "Los Rayos",         church: "IASD Central Puno",          players: 10, status: "confirmed" },
-  { name: "Titanes Azules",    church: "IASD Vallecito",              players: 8,  status: "confirmed" },
-  { name: "Pumas del Lago",    church: "IASD San José",               players: 12, status: "confirmed" },
-  { name: "Águilas Blancas",   church: "IASD Bellavista",             players: 9,  status: "confirmed" },
   { name: "Estrellas del Sur", church: "IASD Huajsapata",             players: 7,  status: "pending"   },
-  { name: "Los Cóndores",      church: "IASD Salcedo",                players: 11, status: "confirmed" },
-  { name: "Rayo Azul",         church: "IASD Mañazo",                 players: 8,  status: "pending"   },
   { name: "Leones del Altiplano", church: "IASD Chanu Chanu",         players: 6,  status: "pending"   },
 ];
 
@@ -469,27 +464,6 @@ function filterTeams() {
 updateCounters(TEAMS);
 renderTeams(TEAMS);
 
-// ── FICHA PDF (embebida en base64) ──
-const FICHA_B64 = "JVBERi0xLjQKJZOMi54gUmVwb3J0TGFiIEdlbmVyYXRlZCBQREYgZG9jdW1lbnQgKG9wZW5zb3VyY2UpCjEgMCBvYmoKPDwKL0YxIDIgMCBSIC9GMiAzIDAgUgo+PgplbmRvYmoKMiAwIG9iago8PAovQmFzZUZvbnQgL0hlbHZldGljYSAvRW5jb2RpbmcgL1dpbkFuc2lFbmNvZGluZyAvTmFtZSAvRjEgL1N1YnR5cGUgL1R5cGUxIC9UeXBlIC9Gb250Cj4+CmVuZG9iagozIDAgb2JqCjw8Ci9CYXNlRm9udCAvSGVsdmV0aWNhLUJvbGQgL0VuY29kaW5nIC9XaW5BbnNpRW5jb2RpbmcgL05hbWUgL0YyIC9TdWJ0eXBlIC9UeXBlMSAvVHlwZSAvRm9udAo+PgplbmRvYmoKNCAwIG9iago8PAovQ29udGVudHMgOCAwIFIgL01lZGlhQm94IFsgMCAwIDU5NS4yNzU2IDg0MS44ODk4IF0gL1BhcmVudCA3IDAgUiAvUmVzb3VyY2VzIDw8Ci9Gb250IDEgMCBSIC9Qcm9jU2V0IFsgL1BERiAvVGV4dCAvSW1hZ2VCIC9JbWFnZUMgL0ltYWdlSSBdCj4+IC9Sb3RhdGUgMCAvVHJhbnMgPDwKCj4+IAogIC9UeXBlIC9QYWdlCj4+CmVuZG9iago1IDAgb2JqCjw8Ci9QYWdlTW9kZSAvVXNlTm9uZSAvUGFnZXMgNyAwIFIgL1R5cGUgL0NhdGFsb2cKPj4KZW5kb2JqCjYgMCBvYmoKPDwKL0F1dGhvciAoXChhbm9ueW1vdXNcKSkgL0NyZWF0aW9uRGF0ZSAoRDoyMDI2MDQyNDExMjUwOSswMCcwMCcpIC9DcmVhdG9yIChcKHVuc3BlY2lmaWVkXCkpIC9LZXl3b3JkcyAoKSAvTW9kRGF0ZSAoRDoyMDI2MDQyNDExMjUwOSswMCcwMCcpIC9Qcm9kdWNlciAoUmVwb3J0TGFiIFBERiBMaWJyYXJ5IC0gXChvcGVuc291cmNlXCkpIAogIC9TdWJqZWN0IChcKHVuc3BlY2lmaWVkXCkpIC9UaXRsZSAoXChhbm9ueW1vdXNcKSkgL1RyYXBwZWQgL0ZhbHNlCj4+CmVuZG9iago3IDAgb2JqCjw8Ci9Db3VudCAxIC9LaWRzIFsgNCAwIFIgXSAvVHlwZSAvUGFnZXMKPj4KZW5kb2JqCjggMCBvYmoKPDwKL0ZpbHRlciBbIC9BU0NJSTg1RGVjb2RlIC9GbGF0ZURlY29kZSBdIC9MZW5ndGggMjUyNgo+PgpzdHJlYW0KR2F0big/I1NJVyg1RDtMLydfXjxKMjckOC5KRCZIaDYpWW00Um5bMSF1UC49WidxXFMvXz4vLDQrbU0lSFJPXmJtRltZbUQ7PFZRcSZKdDxyOG5Sbk1CPm4hczApS0oxUExhciRsRmNhKExXQ3NRc1JVQkhNNztyW0E7ZU0pL146KVYkU3MjVEguVlhSU10xTEBAU1gyN111IiFPZyc5c19da01QamN0QVwhaXQ3cFAuRCE8LmtsXSc5VCdVOWtvQHUlWU86O2BFITFlaFVbLjFDaDw9OT0hazI1ZV86VGleaUZxZCQ5WVxGOUdCZ04yTDBmPkljUVEndCZVTVNKNHRxKitmS1htM090aikxXF1WUl9YUmZDQSwsQGlFVmg1TWhVUlVTY29aJGIpQmRVQCIpWjlbWWByRW8/KTxWb21rXVNfc2dvRV0jPTBQbjY3IkphRC45UC9lO0FrWHBmSCcySjNlb0InXCMlZylaUUFAUU1HP05sWVFSNmRYN1BgUm5mTG04TjM9VXFHTjdIJFonQlkmRm1TKiIqSzhSIT1XSV9KQVBzJjM6XyhhYklBZCNsMTdjVk82Z1RQIWg5cidacFojSzhiL2A9ODdNKl5yZzM2JSpVOFNddEFFKjQuKXEtVyIwbzhMV1FeRiFFX2piN05iaHMxK2NrXWhrVl4raj1vM1pMaltYWmUtMT1fMU0+QV0yQ1BidEE0cUtgYSdFUDcvTVduLl1kXiRoZ1NwMCZPVzNUcVVtVUArY0lsWT5yLTk6UClqalBRU2U8VjhFOlEkMERtPXBqO2FkRkshST4iLl1sUFMjM2BsPEcvalFNSUUhaHVgPjVgQjlYaU4hR05UajdUPDRPPltKXipwLiY1UipALXRjY3JJbkRSLlQiclpfPSctMVZ1czAoXFk1YmdyYGxUM25xbEIhPklQODpUaVNTTDxtcnBZLVFfcC4qJSJwWUVHO1AvKl06ZHBgQDVrZixRLy5VZlZBSSJRZm8zZzpfUGYmVlQlTFdVLiplY1AkQiwnSTlXY2BZTXVbXWIqNDQiLi9TbWdLWz9JXjFqTUIlJyxYQDhWQmdsK3NaJCdoM2dcSDglLSdCTkkkPT9MWiIxJGEkJ0k5ckwxZ21eKENGNUotPmpOQDMyJEYqYD85REQ4YDYpYmpeYF42amEmPVZjbyY8M20wSEpuNG5kJCZtMlo0KDMmOEdcQldmbW0iKjojVSwiJEJsX1hmYl0ucGlOJTxkblxCNUchVWJtT2tgb1MpTyxYcztgUjljXmg0QDQ+aixVIVQwJDEmUGdNK1FOLG1KJD1DN2I/JzYnaEBOJmcpKTFwSThYcSswSHJvYj88UztzUFlkcTknNU5kazpmcUk9PlQ7OT84XiojQ2FmKiZ0YFZvQF1bQUErcyY0VzFnOWFSUSU4UkMxaiciYjgwLShbImU+W0IpPkRFNnNkPnNkNURDV0BBcTMpITxyUyNxMVsoI0BcXVM6U1tsQDB0Y2pGcG5TVV1JXHRkWz1RKWMzQihhYVJyYCJvaykvVnImJE8jREUkTVgoRS9FU0NGbmUlJytQOEdWPTMkNy5PXitVbSpjOFU8bS80Yz9nUlprPmdqLjohUjhBJSEpO204UydVc0s+Kk9fMlVfUExIKD4jJ3VtXTYtb0A8YjkjI2soLENsOWpRcWRqLjFoWjFLZW8zJU0rRVZWKFM1WDsydEkvZWtHUEojO0QiKCFnQzglJy9aZ11DKi8xR0RNbSY9Kl9hXyYxQS1wYGwqXEVzVnAtQkhwWlcuRlIsMDdCbCZCMVpEXFZPMDdQVio1aUo9VHAsY2IjPWtSSEwsaERqWmpwMF5YNio6bkw6PUpsc1I0Lj4wQ0BKLmMsXWBCLCUpb1hrT0VRbWEuQFwpQChmJyxtY09aO2NFXWgralEhMDY8J0BcKUA4azRNM0s6Ml5qNG9FbiVSN1c3Q2c1Lk1bUTtdREptWXUvWVpORFo3cih0QydIXDNcZShWajQ6WlVddGQzQ0Q/KlFgXEZZVE1LTnM3UitIKlY/NTJkdF9XampCb1MuPFFEXUpAcEhTRD9WTmQ4PFhiajNmaD9mPkcuPWRgIUZoQFBfMk5GUTo1JipFTigwczxOcmlBJl4vYTFxaD09amwvXWxCQjVNMVM+TyhkTGo8OGJSPGpUU0RaQmgiaWk+TlIrTDp0XV5GPSVIZD5ebipCUyUpWjBuXCphOEInYk1LTlFrLi06XTI3K2w/UWdWXEdwWCxyPklOYWxDNyYqPSM4MGVgOyVHJDk4ZGYoI20jQyosaTI+Wik0aFlyK18rWjhBUCYrJExOSWZlOlssIXM2SWdILF4hZyFsY08zYGEvMz1gWypYYj9nZyhyLVtFXjtpPC4oR0gsYS5GIjMpWDRgYS1qbGBbLG9NPy0qMmcscnJ0UF0wIiJbM1E+Rjc0MnJYLmBhPlpza2FrSDRnOUE3SUxNYlpqW0BvWTxjQFwvV2s4cz1YUShzKFtsYDs5KFlSZFM0Y2wtcDhIXVNldFcnaG1najwrKD1dRyc8P11eYSoubHArJ25IJVAjSmdHW05jQCVMYnBRa29JRzdULGEqRyIqTDFPbDotSVBKay9FVT5DUytqa0lDbTpxaWxYQC9rUjxGc3JqNGlRYkkhSSlgT0pnTUVGczZhXiVYZ0w6V2YjJmA6Jk5TYjJCMmc9OiQ5T0RdLSZycDxBaSgoNVlRRlJIJCNhZjdfQ11qSkcqalhuRmY4VD9XJ1I7MFhXU2MxSSMicVNkclVzZFoxVF0hMUgyXFtlPjJjKiFtSiQqciR0IWclRkFrOyRPPWRxIUswSVU7PUNwZjgwcz1AQj5sRUBsKyJfc1ZSO001KyMlJV5SXXQ0JF9IdSVRXGIzaU89KGxgKTUiJnIrY0k+S0pCJ3NZalo2OmshXzJmU0paO1lZUXFQaVVHPl9QZmxbMnF1Sjk8JUtzPWxYS05gYl8tVSVCVVg2ZkpiLDsmR0g1SzdeJyNcMy5VLkJUW2QzOWFERTNAX2E4QT83TGdTbWc9I2MvaVlNbGM6bz5kU1dfPkZOSlU7RColbUYvQUhFSERCUWYqJGooaGNXKWVtKSpdMUtbXSwhbjJBPTlIayF1LjsoTmU+cWIhT0tVL1FhJ1pDI1tIXlM1Q0g3aFVoVCJOLlhNYyUjRzErPCgxa1BdMj08J2xPVD5zLFIrITNRRWlOUUpULCwhOHVMVCNNNEI5ZkBwOCIxKnFkXS5yWjBRR1slNmM9WnRkI10+VjQ7XSNWXSYmK0JjZENxKiZDUTUqWj8tUUFlLWUmM10/cFUydDgkOS46a0NnJFtRUV4rNUpuKlJPYEJFJiZJMmMnUH4+ZW5kc3RyZWFtCmVuZG9iagp4cmVmCjAgOQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwNjEgMDAwMDAgbiAKMDAwMDAwMDEwMiAwMDAwMCBuIAowMDAwMDAwMjA5IDAwMDAwIG4gCjAwMDAwMDAzMjEgMDAwMDAgbiAKMDAwMDAwMDUyNCAwMDAwMCBuIAowMDAwMDAwNTkyIDAwMDAwIG4gCjAwMDAwMDA4NzIgMDAwMDAgbiAKMDAwMDAwMDkzMSAwMDAwMCBuIAp0cmFpbGVyCjw8Ci9JRCAKWzxhNzcyZDE1ZmZlNGUyZWZlYjVmOWE5M2E4ZjEzODA4Nj48YTc3MmQxNWZmZTRlMmVmZWI1ZjlhOTNhOGYxMzgwODY+XQolIFJlcG9ydExhYiBnZW5lcmF0ZWQgUERGIGRvY3VtZW50IC0tIGRpZ2VzdCAob3BlbnNvdXJjZSkKCi9JbmZvIDYgMCBSCi9Sb290IDUgMCBSCi9TaXplIDkKPj4Kc3RhcnR4cmVmCjM1NDgKJSVFT0YK";
-
-function downloadFicha() {
-  try {
-    const binary = atob(FICHA_B64);
-    const bytes = new Uint8Array(binary.length);
-    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-    const blob = new Blob([bytes], { type: 'application/pdf' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'Ficha_Inscripcion_Voley_Mixto_Pleyades.pdf';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  } catch(e) {
-    alert('Error al descargar. Por favor intente nuevamente.');
-  }
-}
 </script>
 </body>
 </html>

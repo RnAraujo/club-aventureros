@@ -281,6 +281,51 @@
         }
         .btn-primary:hover .btn-shine { left: 150%; }
 
+        .btn-success {
+    /* Degradado azulado moderno */
+    background: linear-gradient(to bottom right, #3b82f6 0%, #1d4ed8 100%);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 300ms ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    box-shadow: 0 0 30px -8px rgba(59, 130, 246, 0.5);
+}
+
+.btn-success:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 50px -8px rgba(59, 130, 246, 0.7);
+}
+
+.btn-success:active { 
+    transform: scale(0.98); 
+}
+
+/* El efecto de brillo debe apuntar a la nueva clase padre */
+.btn-success .btn-shine {
+    position: absolute;
+    top: 0; 
+    left: -100%; 
+    width: 60%; 
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+    transform: skewX(-20deg);
+    transition: left 600ms ease;
+}
+
+.btn-success:hover .btn-shine { 
+    left: 150%; 
+}
+
         .btn-secondary {
             background: transparent;
             color: #ffffff;
@@ -496,12 +541,19 @@
             </div>
 
             <!-- CTA Buttons -->
-            <div class="animate-in-5 flex flex-col sm:flex-row items-center gap-4 w-full max-w-md mt-10 sm:mt-14">
+            <div class="animate-in-5 flex flex-col sm:flex-row items-center gap-4  mt-10 sm:mt-14">
                 <a href="bases.html" class="btn-primary pulse-glow w-full sm:w-auto justify-center">
                     <iconify-icon icon="mdi:file-document-outline" width="20"></iconify-icon>
                     <span>Ver Bases del Torneo</span>
                     <span class="btn-shine"></span>
                 </a>
+
+                <a href="equipos.html" class="btn-success pulse-glow w-full sm:w-auto justify-center">
+                    <iconify-icon icon="mdi:file-document-outline" width="20"></iconify-icon>
+                    <span>Equipos registrados</span>
+                    <span class="btn-shine"></span>
+                </a>
+
                 <a href="documents/ficha_inscripcion.pdf" target="_blank" class="btn-secondary w-full sm:w-auto justify-center">
                     <iconify-icon icon="mdi:clipboard-text-outline" width="20"></iconify-icon>
                     <span>Ficha de Inscripción</span>
