@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Club de Aventureros Pléyades – Campeonato de Vóley Mixto</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0d1f3c;
+    --blue: #1a4a8a;
+    --sky: #2e7dd1;
+    --gold: #f0a500;
+    --gold-light: #ffd166;
+    --white: #f5f7fa;
+    --light-bg: #e8eff9;
+    --text: #1a2535;
+    --muted: #5a6a80;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--white);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  header {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 60%, #1565c0 100%);
+    color: white;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    min-height: 320px;
+    display: flex;
+    align-items: center;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 80% 50%, rgba(240,165,0,0.15) 0%, transparent 55%),
+      radial-gradient(circle at 10% 80%, rgba(46,125,209,0.25) 0%, transparent 45%);
+    pointer-events: none;
+  }
+
+  /* volleyball net pattern */
+  header::after {
+    content: '';
+    position: absolute;
+    top: 0; right: -20px; bottom: 0;
+    width: 380px;
+    opacity: 0.06;
+    background-image:
+      repeating-linear-gradient(0deg, white 0, white 1px, transparent 1px, transparent 28px),
+      repeating-linear-gradient(90deg, white 0, white 1px, transparent 1px, transparent 28px);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 48px 32px 40px;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: 32px;
+    align-items: center;
+  }
+
+  .hero-badge {
+    flex-shrink: 0;
+    width: 96px; height: 96px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 48px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.35), 0 0 0 6px rgba(240,165,0,0.3);
+    animation: pulse-badge 3s ease-in-out infinite;
+  }
+  @keyframes pulse-badge {
+    0%,100% { box-shadow: 0 8px 32px rgba(0,0,0,0.35), 0 0 0 6px rgba(240,165,0,0.3); }
+    50% { box-shadow: 0 8px 32px rgba(0,0,0,0.35), 0 0 0 14px rgba(240,165,0,0.1); }
+  }
+
+  .hero-text { flex: 1; }
+
+  .hero-eyebrow {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 8px;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(38px, 7vw, 68px);
+    line-height: 0.95;
+    letter-spacing: 1px;
+    color: white;
+    margin-bottom: 12px;
+  }
+
+  .hero-title span { color: var(--gold); }
+
+  .hero-sub {
+    font-size: 16px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.5;
+    max-width: 480px;
+    margin-bottom: 24px;
+  }
+
+  /* ── DOWNLOAD BUTTON ── */
+  .btn-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--gold);
+    color: var(--navy);
+    padding: 14px 28px;
+    border-radius: 4px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 18px rgba(240,165,0,0.45);
+  }
+  .btn-download:hover {
+    background: var(--gold-light);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(240,165,0,0.55);
+  }
+  .btn-download:active { transform: translateY(0); }
+  .btn-download svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+  /* ── INFO STRIP ── */
+  .info-strip {
+    background: var(--navy);
+    color: white;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0;
+  }
+  .info-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 28px;
+    border-right: 1px solid rgba(255,255,255,0.08);
+  }
+  .info-item:last-child { border-right: none; }
+  .info-icon { font-size: 22px; }
+  .info-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--gold-light);
+    font-family: 'Barlow Condensed', sans-serif;
+  }
+  .info-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    line-height: 1.3;
+  }
+
+  /* ── MAIN CONTENT ── */
+  main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 48px 24px 64px;
+  }
+
+  /* ── SECTION CARD ── */
+  .section-card {
+    margin-bottom: 28px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(13,31,60,0.09);
+    background: white;
+    border: 1px solid rgba(13,31,60,0.06);
+    animation: fadeUp 0.5s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .section-card:nth-child(1) { animation-delay: 0.05s }
+  .section-card:nth-child(2) { animation-delay: 0.10s }
+  .section-card:nth-child(3) { animation-delay: 0.15s }
+  .section-card:nth-child(4) { animation-delay: 0.20s }
+  .section-card:nth-child(5) { animation-delay: 0.25s }
+  .section-card:nth-child(6) { animation-delay: 0.30s }
+  .section-card:nth-child(7) { animation-delay: 0.35s }
+  .section-card:nth-child(8) { animation-delay: 0.40s }
+  .section-card:nth-child(9) { animation-delay: 0.45s }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 22px;
+    background: linear-gradient(90deg, var(--navy) 0%, var(--blue) 100%);
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+  }
+  .section-header:hover {
+    background: linear-gradient(90deg, #162d52 0%, #1f5aa0 100%);
+  }
+  .section-icon { font-size: 22px; }
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: white;
+    flex: 1;
+  }
+  .section-chevron {
+    color: rgba(255,255,255,0.5);
+    transition: transform 0.3s;
+    font-size: 18px;
+  }
+  .section-card.open .section-chevron { transform: rotate(180deg); }
+
+  .section-body {
+    display: none;
+    padding: 20px 22px 22px;
+    background: white;
+  }
+  .section-card.open .section-body { display: block; }
+
+  .section-body p {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .section-body ul {
+    list-style: none;
+    padding: 0;
+  }
+  .section-body ul li {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    padding: 5px 0 5px 22px;
+    position: relative;
+    border-bottom: 1px solid rgba(13,31,60,0.04);
+  }
+  .section-body ul li:last-child { border-bottom: none; }
+  .section-body ul li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 14px;
+    width: 8px; height: 8px;
+    background: var(--sky);
+    border-radius: 50%;
+  }
+
+  /* ── HIGHLIGHT BOXES ── */
+  .highlight-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-top: 4px;
+  }
+  .highlight-box {
+    background: var(--light-bg);
+    border-radius: 6px;
+    padding: 16px 18px;
+    border-left: 4px solid var(--sky);
+    text-align: center;
+  }
+  .highlight-box .h-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 34px;
+    color: var(--blue);
+    line-height: 1;
+  }
+  .highlight-box .h-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-weight: 600;
+  }
+
+  .alert-box {
+    background: #fff8e8;
+    border: 1.5px solid var(--gold);
+    border-radius: 6px;
+    padding: 14px 16px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+  .alert-box .a-icon { font-size: 20px; flex-shrink: 0; }
+  .alert-box p { margin: 0; font-size: 14.5px; font-weight: 600; color: #5a3a00; }
+
+  /* ── COSTS TABLE ── */
+  .costs-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+  }
+  .costs-table th {
+    background: var(--blue);
+    color: white;
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 13px;
+    padding: 10px 14px;
+    text-align: left;
+  }
+  .costs-table td {
+    padding: 10px 14px;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(13,31,60,0.06);
+  }
+  .costs-table tr:nth-child(even) td { background: var(--light-bg); }
+  .costs-table .amount {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: var(--blue);
+  }
+
+  /* ── SANCIONES ── */
+  .sancion-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(13,31,60,0.05);
+  }
+  .sancion-item:last-child { border-bottom: none; }
+  .sancion-badge {
+    flex-shrink: 0;
+    padding: 3px 10px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+  .badge-yellow { background: #fff3cd; color: #7a5c00; border: 1px solid #f0c040; }
+  .badge-red    { background: #fde8e8; color: #8b0000; border: 1px solid #e57373; }
+  .badge-black  { background: #1a1a1a; color: white; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.55);
+    text-align: center;
+    padding: 28px 20px;
+    font-size: 13px;
+  }
+  footer strong { color: var(--gold-light); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .hero-inner { flex-direction: column; text-align: center; padding: 36px 20px 32px; }
+    .hero-sub { margin: 0 auto 22px; }
+    .info-item { padding: 14px 18px; }
+    .highlight-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header>
+  <div class="hero-inner">
+    <div class="hero-badge">🏐</div>
+    <div class="hero-text">
+      <div class="hero-eyebrow">Día del Aventurero · Puno</div>
+      <h1 class="hero-title">Club de<br>Aventureros<br><span>Pléyades</span></h1>
+      <p class="hero-sub">Campeonato de Vóley Mixto — organizado por la Comisión de Deportes para confraternizar a los miembros de la familia adventista.</p>
+      <button class="btn-download" onclick="downloadPDF()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Descargar Bases en PDF
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- INFO STRIP -->
+<div class="info-strip">
+  <div class="info-item">
+    <span class="info-icon">📅</span>
+    <div>
+      <div class="info-label">Fecha</div>
+      <div class="info-value">Domingo 24 de mayo</div>
+    </div>
+  </div>
+  <div class="info-item">
+    <span class="info-icon">📍</span>
+    <div>
+      <div class="info-label">Lugar</div>
+      <div class="info-value">Colegio Adventista Puno<br><small style="font-size:12px;color:rgba(255,255,255,0.6)">Jr. Deza con Jr. Piura</small></div>
+    </div>
+  </div>
+  <div class="info-item">
+    <span class="info-icon">⏰</span>
+    <div>
+      <div class="info-label">Inscripción hasta</div>
+      <div class="info-value">23 mayo · 21:00 h</div>
+    </div>
+  </div>
+  <div class="info-item">
+    <span class="info-icon">📲</span>
+    <div>
+      <div class="info-label">WhatsApp</div>
+      <div class="info-value">970 139 030</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main>
+
+  <!-- 1. OBJETIVOS -->
+  <div class="section-card open" onclick="toggleCard(this)">
+    <div class="section-header">
+      <span class="section-icon">🎯</span>
+      <span class="section-title">Objetivos</span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <p>La Comisión de Deportes del Club de Aventureros Pléyades organiza este campeonato de vóley mixto por el <strong>Día del Aventurero</strong>, con el objetivo de garantizar el deporte y la confraternización de los padres de familia y miembros de Iglesia de los diferentes clubes de aventureros, conquistadores y otros.</p>
+      <p>El torneo busca generar identidad con la organización en reconocimiento a las actividades que realiza el club.</p>
+    </div>
+  </div>
+
+  <!-- 2. INSCRIPCIÓN -->
+  <div class="section-card open" onclick="toggleCard(this)">
+    <div class="section-header">
+      <span class="section-icon">📝</span>
+      <span class="section-title">Inscripción</span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="alert-box">
+        <span class="a-icon">⚠️</span>
+        <p>Fecha límite: <strong>23 de mayo hasta las 21:00 h</strong>. Enviar ficha al WhatsApp <strong>970 139 030</strong>. Improrrogable.</p>
+      </div>
+      <div class="highlight-grid">
+        <div class="highlight-box">
+          <div class="h-num">6–12</div>
+          <div class="h-label">Jugadores por equipo</div>
+        </div>
+        <div class="highlight-box">
+          <div class="h-num">3+3</div>
+          <div class="h-label">Varones + Damas en cancha</div>
+        </div>
+        <div class="highlight-box">
+          <div class="h-num">S/ 20</div>
+          <div class="h-label">Inscripción por equipo</div>
+        </div>
+      </div>
+      <ul style="margin-top:14px;">
+        <li>Los participantes deben presentar su DNI e inscribirse mediante su delegado.</li>
+        <li>Deben ser miembros de la Iglesia Adventista del Séptimo Día. Se permiten máx. 2 invitados externos.</li>
+        <li>Luego del cierre <strong>no se puede modificar la lista</strong> ni añadir jugadores.</li>
+        <li>Cada participante solo puede pertenecer a <strong>un equipo</strong> durante todo el torneo.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 3. SISTEMA DEL CAMPEONATO -->
+  <div class="section-card" onclick="toggleCard(this)">
+    <div class="section-header">
+      <span class="section-icon">🏆</span>
+      <span class="section-title">Sistema del Campeonato</span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="highlight-grid" style="margin-bottom:14px;">
+        <div class="highlight-box">
+          <div class="h-num">2</div>
+          <div class="h-label">Sets por partido (20 pts c/u)</div>
+        </div>
+        <div class="highlight-box">
+          <div class="h-num">15</div>
+          <div class="h-label">Puntos en tie-break</div>
+        </div>
+        <div class="highlight-box">
+          <div class="h-num">10'</div>
+          <div class="h-label">Tolerancia máxima de ingreso</div>
+        </div>
+      </div>
+      <ul>
+        <li><strong>Modalidad:</strong> eliminación directa en todas las fases. Sorteo público previo a cada fase.</li>
+        <li><strong>Reglamento:</strong> Federación Nacional de Voleibol (FNVB) con adaptaciones del torneo.</li>
+        <li><strong>Puntuación:</strong> rally point en todos los sets.</li>
+        <li>W.O. automático si el equipo no se presenta en el tiempo de tolerancia.</li>
+        <li>Cambios ilimitados con posibilidad de reingreso, siempre coordinados con el árbitro.</li>
+        <li>El incumplimiento de la composición mixta (3V+3D) es sancionado con W.O. inmediato.</li>
+        <li>Control de identidad con DNI físico antes de cada partido. Suplantación = descalificación.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4. PARTICIPANTES -->
+  <div class="section-card" onclick="toggleCard(this)">
+    <div class="section-header">
+      <span class="section-icon">👥</span>
+      <span class="section-title">Participantes</span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <ul>
+        <li>Los equipos se conforman por grupos o unidades. Si no se alcanza el mínimo, pueden integrarse con otras unidades.</li>
+        <li>Cada equipo debe llevar un <strong>nombre representativo</strong>.</li>
+        <li>Los integrantes de equipos eliminados <strong>no pueden reforzar a otro equipo</strong> bajo pena de descalificación automática.</li>
+        <li>Presentarse con <strong>uniformes del mismo color</strong> (mínimo polos iguales).</li>
+        <li>La organización no se responsabiliza por lesiones. Se recomienda seguro personal.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 5. COSTOS -->
+  <div class="section-card" onclick="toggleCard(this)">
+    <div class="section-header">
+      <span class="section-icon">💰</span>
+      <span class="section-title">Costos</span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <table class="costs-table">
+        <tr>
+          <th>Concepto</th>
+          <th>Monto</th>
+          <th>Notas</th>
+        </tr>
+        <tr>
+          <td>Inscripción de equipo</td>
+          <td><span class="amount">S/ 20</span></td>
+          <td>Por equipo participante</td>
+        </tr>
+        <tr>
+          <td>Arbitraje</td>
+          <td><span class="amount">S/ 5</span></td>
+          <td>Por equipo, por partido</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 6. SANCIONES DISCIPLINARIAS -->
+  <div class="section-card" onclick="toggleCard(this)">
+    <div class="section-header">
+      <span class="section-icon">🟨</span>
+      <span class="section-title">Sanciones Disciplinarias</span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="sancion-item">
+        <span class="sancion-badge badge-yellow">🟡 Amarilla</span>
+        <span>Advertencia al jugador.</span>
+      </div>
+      <div class="sancion-item">
+        <span class="sancion-badge badge-red">🔴 Roja</span>
+        <span>Punto para el equipo contrario.</span>
+      </div>
+      <div class="sancion-item">
+        <span class="sancion-badge badge-black">⚫ Expulsión</span>
+        <span>Retiro del jugador por conducta antideportiva grave.</span>
+      </div>
+      <div class="sancion-item">
+        <span class="sancion-badge badge-red">⚠️ Agresión</span>
+        <span>Agresión verbal o física: expulsión del equipo del campeonato.</span>
+      </div>
+      <div class="sancion-item">
+        <span class="sancion-badge badge-black">🚫 Suplantación</span>
+        <span>Descalificación inmediata del equipo y expulsión del campeonato.</span>
+      </div>
+      <p style="margin-top:12px;font-size:13.5px;color:var(--muted);">Las decisiones arbitrales son <strong>inapelables</strong>. Solo el delegado acreditado puede presentar reclamos.</p>
+    </div>
+  </div>
+
+  <!-- 7. DELEGADOS -->
+  <div class="section-card" onclick="toggleCard(this)">
+    <div class="section-header">
+      <span class="section-icon">📋</span>
+      <span class="section-title">Responsabilidades del Delegado</span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <ul>
+        <li>Inscribir debidamente al equipo y presentar la lista de jugadores con DNI con <strong>10 minutos de anticipación</strong>.</li>
+        <li>Es la <strong>única persona autorizada</strong> para presentar reclamos durante el partido.</li>
+        <li>Acatar todos los acuerdos y comunicados del Comité Organizador.</li>
+        <li>Velar por la disciplina del equipo y simpatizantes. Cualquier desborde es responsabilidad del delegado.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 8. ARBITRAJE -->
+  <div class="section-card" onclick="toggleCard(this)">
+    <div class="section-header">
+      <span class="section-icon">🦺</span>
+      <span class="section-title">Arbitraje</span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <ul>
+        <li>Los árbitros son convocados por el Comité Organizador.</li>
+        <li>Resolverá todos los casos dudosos. Sus fallos son <strong>inapelables</strong>.</li>
+        <li>Verificará identidad de jugadores y estado del campo antes de cada encuentro.</li>
+        <li>Puede suspender el partido en caso de incidentes graves, informando al Comité para resolución final.</li>
+        <li>No está facultado para modificar el reglamento del campeonato.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 9. PREMIACIÓN -->
+  <div class="section-card" onclick="toggleCard(this)">
+    <div class="section-header">
+      <span class="section-icon">🥇</span>
+      <span class="section-title">Premiación y Clausura</span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <p>Se realizará una <strong>ceremonia de clausura</strong> con entrega de premios al <strong>1.er y 2.do lugar</strong> (campeón y subcampeón).</p>
+      <p>La ausencia injustificada del equipo en la premiación implicará la pérdida del reconocimiento, sin derecho a reclamo.</p>
+    </div>
+  </div>
+
+  <!-- DOWNLOAD SECTION -->
+  <div style="margin-top:40px; text-align:center; padding:36px 24px; background:linear-gradient(135deg, var(--navy), var(--blue)); border-radius:10px; color:white; box-shadow: 0 8px 32px rgba(13,31,60,0.25);">
+    <p style="font-family:'Barlow Condensed',sans-serif; font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--gold-light); margin-bottom:10px;">Documento Oficial</p>
+    <h2 style="font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:1px; margin-bottom:8px;">Bases Completas del Campeonato</h2>
+    <p style="font-size:14px; color:rgba(255,255,255,0.65); margin-bottom:24px;">Descarga el documento oficial en PDF con todas las disposiciones del torneo.</p>
+    <button class="btn-download" onclick="downloadPDF()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      Descargar Bases en PDF
+    </button>
+  </div>
+
+</main>
+
+<footer>
+  <strong>Club de Aventureros Pléyades</strong> &nbsp;·&nbsp; La Comisión Organizadora &nbsp;·&nbsp; Puno, Perú
+</footer>
+
+<script>
+function toggleCard(card) {
+  // don't toggle if clicking inside body links/buttons
+  card.classList.toggle('open');
+}
+
+// PDF base64 data (embedded)
+const PDF_B64 = "JVBERi0xLjQKJZOMi54gUmVwb3J0TGFiIEdlbmVyYXRlZCBQREYgZG9jdW1lbnQgKG9wZW5zb3VyY2UpCjEgMCBvYmoKPDwKL0YxIDIgMCBSIC9GMiAzIDAgUiAvRjMgNSAwIFIKPj4KZW5kb2JqCjIgMCBvYmoKPDwKL0Jhc2VGb250IC9IZWx2ZXRpY2EgL0VuY29kaW5nIC9XaW5BbnNpRW5jb2RpbmcgL05hbWUgL0YxIC9TdWJ0eXBlIC9UeXBlMSAvVHlwZSAvRm9udAo+PgplbmRvYmoKMyAwIG9iago8PAovQmFzZUZvbnQgL0hlbHZldGljYS1Cb2xkIC9FbmNvZGluZyAvV2luQW5zaUVuY29kaW5nIC9OYW1lIC9GMiAvU3VidHlwZSAvVHlwZTEgL1R5cGUgL0ZvbnQKPj4KZW5kb2JqCjQgMCBvYmoKPDwKL0NvbnRlbnRzIDEwIDAgUiAvTWVkaWFCb3ggWyAwIDAgNTk1LjI3NTYgODQxLjg4OTggXSAvUGFyZW50IDkgMCBSIC9SZXNvdXJjZXMgPDwKL0ZvbnQgMSAwIFIgL1Byb2NTZXQgWyAvUERGIC9UZXh0IC9JbWFnZUIgL0ltYWdlQyAvSW1hZ2VJIF0KPj4gL1JvdGF0ZSAwIC9UcmFucyA8PAoKPj4gCiAgL1R5cGUgL1BhZ2UKPj4KZW5kb2JqCjUgMCBvYmoKPDwKL0Jhc2VGb250IC9IZWx2ZXRpY2EtT2JsaXF1ZSAvRW5jb2RpbmcgL1dpbkFuc2lFbmNvZGluZyAvTmFtZSAvRjMgL1N1YnR5cGUgL1R5cGUxIC9UeXBlIC9Gb250Cj4+CmVuZG9iago2IDAgb2JqCjw8Ci9Db250ZW50cyAxMSAwIFIgL01lZGlhQm94IFsgMCAwIDU5NS4yNzU2IDg0MS44ODk4IF0gL1BhcmVudCA5IDAgUiAvUmVzb3VyY2VzIDw8Ci9Gb250IDEgMCBSIC9Qcm9jU2V0IFsgL1BERiAvVGV4dCAvSW1hZ2VCIC9JbWFnZUMgL0ltYWdlSSBdCj4+IC9Sb3RhdGUgMCAvVHJhbnMgPDwKCj4+IAogIC9UeXBlIC9QYWdlCj4+CmVuZG9iago3IDAgb2JqCjw8Ci9QYWdlTW9kZSAvVXNlTm9uZSAvUGFnZXMgOSAwIFIgL1R5cGUgL0NhdGFsb2cKPj4KZW5kb2JqCjggMCBvYmoKPDwKL0F1dGhvciAoXChhbm9ueW1vdXNcKSkgL0NyZWF0aW9uRGF0ZSAoRDoyMDI2MDQyNDExMTMwNiswMCcwMCcpIC9DcmVhdG9yIChcKHVuc3BlY2lmaWVkXCkpIC9LZXl3b3JkcyAoKSAvTW9kRGF0ZSAoRDoyMDI2MDQyNDExMTMwNiswMCcwMCcpIC9Qcm9kdWNlciAoUmVwb3J0TGFiIFBERiBMaWJyYXJ5IC0gXChvcGVuc291cmNlXCkpIAogIC9TdWJqZWN0IChcKHVuc3BlY2lmaWVkXCkpIC9UaXRsZSAoXChhbm9ueW1vdXNcKSkgL1RyYXBwZWQgL0ZhbHNlCj4+CmVuZG9iago5IDAgb2JqCjw8Ci9Db3VudCAyIC9LaWRzIFsgNCAwIFIgNiAwIFIgXSAvVHlwZSAvUGFnZXMKPj4KZW5kb2JqCjEwIDAgb2JqCjw8Ci9GaWx0ZXIgWyAvQVNDSUk4NURlY29kZSAvRmxhdGVEZWNvZGUgXSAvTGVuZ3RoIDIwNDkKPj4Kc3RyZWFtCkdiISNcZ04pIj0mOk86U29WN1dAJnJnY09eV0JVIlAvPyxXblNZZFspNU1nVzkiMGBeQ1wlL1E0VFlYWkNwWWgkQ0siZVBSKjRhQ2g1PlY8XnFeczhzMit1dEMnKmtcMUxNUCdrLnA+TCU/aXNZUEknXmpDYnNOdD5IVlViJSwrSWdgQjtiaUZuZyQ5KT5Kbk9iO0B0XktDPitBWm9eMUVgPlMqY2w9NChkLF49dEtiYlpPWFA3SSlAUUpLQUFyLV0zb0grM2hMJEVhTCNtdC9DOm8tYkZiYSlLZSo+KVtuIllDbD9hUiFhUC4+UFJUKSk1QCVeWT9ySFxmYEJOXUA8ajMsbGpaa0VbWz5WRSQwY0IwTDIoRVwuXUJIMVI/IlwvSEtDMz8wazBOO2Y+ImoqTCcpb1wsajlHTmJJJSxeKFYmYC4zPnE1ciswOW5tWis4Ml8kJU0hIk8sa0osSTVqbW0lTExkamZCUkg/M1pzMUlVWT9hPTRzP05WRlVUM21UJDpCbGBWNmgqZkgoVyZELUxxOSdJWCJSW3NIWicqb0dBZEZ1NWQkWTxFL1NoVkdGMGsyVSFeU2w7RV9vYFkwLSorbVM/NEZCQjNMI0hbNi9aNkoqXm5aczNtOmNcXkFhTURKM0hWU3EoMzQwIzxYT3Q+Q1FXODAnRXJyR1RjNVh0MiFELDI9dFooOj1UUSMlZThqMzE4IyFMWVZNW0svJFUwSVBjJjRTbUM7RWpFSzg5LGNuXmRSLk89LlRbO0kzcmxHc3JCVVolYlsnaXM2XDZHY" +
+"WlVgWkpFLHMvZ1NNbW5QWiI6WV9DV2VPUnNic0g+XDEudE1QaGJsViYpVDlFKjJSaGJMM3JcViwyc" +
+"Ww" +
+"rQFtsJSpbdHFPYl10Q0JhYW5EZUE0QHAqQlEiS0AhXzUydSw8NlBJM1BacGFFYDAlIzQnIiEtJixqNSw3RU08YCVUbCkhaXBXdVImVipMRyRqU1RfOEkjSlQ0SV5JQWFKZj5FLlo7XVwsIjZeTkghKVBYVz4kLmlGRWdZZWM5cTVdTiRwQzxxYmw/XypbQzNeNGBMWjZvSDYxR2IhOEcrUzdcS19kcEU1UCc9TmlFcTtRTUtzLjAtO09hUz0rVUNbP3NwUXNlKU9eJkJWUyolKVssR3Ija0YhQVJhKCs7MEkvQi5ENSZWSnJyXGdzZj8tW28jXylFPzBNZkVvRDlGWTJDJFppZEJoKTUqYGJqPlwoQidPUVw2Nzpf" +
+"U2lpQS9POEQyO3QpLnImZitSLjVjXSVnMDovRDtoSylzL0JRYzIzWDlsKFxOPk9ZTVJTNlAxO15FZjZWM01hX0lbY2I+YChmVihYZi4rTXBWNWlMJmNWNiI+ODRmOHBObWpjImVcP0JeZ2tIYz9ZZWc/azUmS1d1WWQsYSdcSy4uRTUuV14nYFRaKDEzcTJmT2BDRylkREpnVFNSTnJiMGFHcDI5aUYsXFowWWI8OTtQSF43REk5NVE2IyFfWz8pbW1UZkM4Z3RlRFI3XGwxRjtjZ147WkVvIzktZkVsQFMzUXJCL3NiJDxeRTI9SSleIVllPiYrLG9yMV5TIkZEMTtRJjQ/QGtHamNWLDo+ZGVfIi9hTVRvXzc8Omc9YCVEaE9BdDtdNjxRQjc+SjhZclg4WzZKXyhyNXQyZipAS1JKYzcnZ2s1NXBmZTVYNVo3LlRkR3VpXC90OEJhM3U1M1pHXEtPNydndFhxRERAJVtZKlhrIktcUCtlOGVTQENJTiRVS2skXjFNaUYmRTEvUz0iY2lLa2xnRXQ6Llc3Lk49OjxXQyE5WmciYl4kJT5tImBIXEcrLFcwS2psVVIlQF40cjwoRmtRRFhRNSRvU1hwZV9vRjllXmFcbjxSbVxyY3BWIjw1KnIkU2w4WSc2QEllQlIpUVcvLj8qKSIlUj8mdCFmQGpnXTJMMltjaU5uZmxoUTgwcCdkPG1UWTJPV3FhK0UjVz44PV83dWJeX2oySllSKHVfJCxsanU6dSU3STsmWzIkKFJtJGBHNlpkMCMvRXEkTHVQMHReQlZbT1RmM2c0OCVtWnNTWjFpcDsxLSVNXlYhP2c+J1RXKiJuIzJlaWBdOUJSbl01PTBtblErXlFTSCVKVmY+OnA2QVEqczVQVV8kVTtyal8vJilpUTNXLlUyIkBQZkptYHBZI1NnWEMqPkFkLUpYLVBMP0svTFBSZGJIc0Q8M2IkMStJKHU7SVBIMmplUEp0MzFCM14wXTRKVFtuVGk/MW5SY11Ob2xBKU9WdFpOUj05dWRnOlFGWihzTHFpUTQlTkI7NCZ1UEplX0B1aGQ1PlUvOmglYiU5V1lQMi07X1lRLTA/Ukc2PkxaajFSUzNESDlhMk9HQyhxSVlTJzZkLUswUF06YXBCKWlUUk5AI1VCND9daVJkLWNrIT87Q25pMCVDJ2ZMX3E8T2ZWYzRHczs/QkUqbCNORj5RLCIxQztkL1MqVk1RMW5yTm5JO2dOWGE9cWBhNkNtX11rKUosXEFlKl4hSj9AJkovLlU7dG1tSyE6PC06bVcjV1czb2FTcERUZFwtJGpUSFJQJnRlZTRmbyNcbkBmbFtyU0htJ0EiKkxMZDNQcFFaLnBJQzVTXXVnJzlySjVPLDBdWy9uQC8vY1pwVEFTTDcwWkY6OFVCYW5BYjZAKCx0WDY1TXQ3ZlwzS08jUEFNRyVWJ1RkaSJcUyIudXFwSDJ+PmVuZHN0cmVhbQplbmRvYmoKMTEgMCBvYmoKPDwKL0ZpbHRlciBbIC9BU0NJSTg1RGVjb2RlIC9GbGF0ZURlY29kZSBdIC9MZW5ndGggMjA5MQo+PgpzdHJlYW0KR2IhI1w+dVRLSyY6RVlCYlRpbnJhIiw5O2BMQ2pAYXNnZzZqUSxVK3IzRFYoREUxO1NYPFxGUllKMi4jZlMxWVJRVTZzako7KF8paFdhOmg9Wz8+QE08XGA8JnRMVzxtQz1AdWQsTExJZkM8Ti9WPUVSL2JFOkg0a3JUbk1EdXI9Ul5ZXVdTKzVmLmFtS0Q/UmQuTz1OR1hEJU5JLmosJihRYzxqYixRZ1A1TmlMW18xOkVbJ2pcUjhxVCtfUzAmQGJNaiNESWpMSlFPanAnMlgnTC8+ZkgzXkpaPE9aP" +
+"VtUJ3Epc1oqUFdPaC5AYydMblxwVWJHVm0oQyo3Jjk4YFZiQilcJFVEIVRtczBDZCdyIS5KbzE7P15WVE85bkhrUV5kRjZGXkpJOCUpOjlUW1g6ciVobGV1YU8wTUxNME05SXBodGJQNzwkVS9SVyk4MiI5K2JwXy5ENz4zIlA7MVkzV2IwLTxYQVprUzYlQzhDXydKIyZPLz89dGZzJlMpWXMlOW5GNFtIV2BLZWcjQVxwXDRWa2ZAaWEvOmxRKEglXThhLUJZOk0kP0poJWFmXlV0KCExIlQ0TygnUFVpP2BsJmtWNzk8ZCkoYDFFO2dhXkEtQSw5ITpvVGJOJjNJa0hqOEEnMjBQOU1kbVtxWkVMKVZGOjsrWSg7SGZyaUgvZD4hWUo8ZWM6RmRJPVhYRCdRQighYGppTTlmWyFLJkZUKVJsYTc7bU5zVzpOP1BQLHE/P0hXaEFaJ2IuRENfO09GWy9bMztzQWszMyhiYlZGJ1EpPm49IkVLZi5ZYTcsM1lvczpuIURnOWJZSkZMQj9WOCE5aUBOOSxTb2MyNVhIQmRbN3FeWl1iSjhDSy80YCkxLiI7NnRZazM3MDooPWFVLWB0S2U1a2Q2dUFMYDdGLGgmIzozR0MrXyFxOjRXLm5XRUgyYUBMTmIyTktuaCNyWW5KbDdQJDxgaTtOSldAIlBbOmpONmxxNjpGLk5XL11mXiZCMF5hTWNkO2Qma2VERG4yKD9AczUkNWs6JWZDbWB1XD1nJiFfI2FvUCJPQWVMPFtnSSsiLjk3Zi1LQjlAc21oRFJWJCFDOVRqcGwwRXEuYG5wUz5zSGMkLF50Y1lObXNjMnRGY2ZgNztBLi5EPCJXOixQPyVbXCtNKUZeW2ghWjcuVFMzYHNkR0grXXA3ZypERiVQK15JdVBdOCJoMk5nKVhrcm1xO3IzI2hmaDNrLzNPO21mZHJVQVcqNEgtOVZcQmdyOCU5aF1NMFRuczk/YWYmL3NoVy8wVzsj" +
+"U0ohVFhmY15VITpUczJUU1A7RGgxTkUvPD9sPUJvQz49ZCIvUDo+ZS9EQ3FaZGk/TUIVNV1sKm9h" +
+"YGEvaiNhZ1pfXypLLGQtKGVka0thI3FpRThlaPJVZXMwSDRXRjxrIjBGMHBDWiNoL0AlPSVYZTVecWgyMTZTTzhDWkQ7SV5DK2EqXVt0VSxoVj1NJTlFaytmbGBtO1JhYTRfbEVHJ2tKZUc/TidHczM2WzkwL1gmMkYuYU1jK1NhSlUqbVcqN2BXWWBuXUsyTjVZKGUlPExOLlRqMy5TJ2UjMj1UJ2VRYTIvLUpLKz4/JVtoaxMb29eKUNXRmUnVV5CSmRULS5jcS5vO1ovXFg8Tmk3JVQrWVhNUUttcWU4I2IrKXRWOnBqUU9XOC48VD01bEJLL3BlRV80Z2tdRVRBQ2MmJi80cm9GJVBIJFJuW0VwMlEySipWIUAqXypTQjUlKDo6I2BXL2xga11rX3RVSCRYTF5fRGlJNjoxOVI0bmFnOlAxPjBOJDtAKGZFPmBOQCs4TVwzXEdhIzcnQylcKS44VV9LKTFpJiVoKE9TJFIjPGxnOnEpK0BmUDgoKDpELidVcmJXND86JjgnNiM2MiVlcTJscUdKZjduRFFkclE+bTcrWiJPaWFmN05mKGlDUSRyNyYpXzJgI1pyV2JHWmVvYStia0YuXiJMVGJkZVNVXlhLXV5KOGMjWT4/Q188Yz87YUY9NiM0XEUmOl8vTl1YIiNCZipoZHEvIW9wOylGXk81RD5gNEwoKy0sJXMzKEVCT188cFpAPFE7WCY+L0diLVc5b0FJYVZ1PVwhI0wsNGViXTIhKF0+RE1WRm8pVEpYWm09JnU4QSNzcXBdYjhVRlk2SUw9YG5ONyUuV3BnNlNjXEVMPXNAYCU+Q2g7VDk9USw/IWgwOTJsY2hlaVhpWDY+M1Q1Q2UtR11OXWpFOCtCOlluWmYzPWRMRl49Mm1nMk9sXFFILGknOWRyLDF1T3QtQTNnSl40dG5YKlFvMFA/NkRSa0ByKGRZW0tUMT9tTV08IywwQyxjSmJvSDRyL0UiL1RHUitoPiI5V19AYFFoNyhOS088OlsrXiIxKC8rVGckdUguZV1PRkdXLy0uT2QuUj1dX1RZUmw4bm9hWEYwOiRaSHU4JUdYN2Y2Pl1GaicyXFg2JGcrW1gkJ00wJV4kaiguR2lxUGloUkgvREpMWFl0UWpRXl1iWDFBL2VJLDNockk2a2NrUVBnNE1iQyJmJy5lMD4mZWVwajt0ITo6WUVaSFc/clVxMEFnYVBCWi0/KmZUPENjRG1fXWg0JiYoNy5yaC9RXSVYI0ZERzUuWFo+ZzBKQTJqMEJtNyZOWmFLZzVNNGNKcFxUcmJKLHVQJDlUPTk+T0FjS1EocFhobyJQRTlaUEpFX0BoX3JVU00vYk1ASyRpcjZkJjllTGhNOW1YI2k/JE1yJC1wTU8jcE5yQi5cO25YcH4+ZW5kc3RyZWFtCmVuZG9iagp4cmVmCjAgMTIKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDYxIDAwMDAwIG4gCjAwMDAwMDAxMTIgMDAwMDAgbiAKMDAwMDAwMDIxOSAwMDAwMCBuIAowMDAwMDAwMzMxIDAwMDAwIG4gCjAwMDAwMDA1MzUgMDAwMDAgbiAKMDAwMDAwMDY1MCAwMDAwMCBuIAowMDAwMDAwODU0IDAwMDAwIG4gCjAwMDAwMDA5MjIgMDAwMDAgbiAKMDAwMDAwMTIwMiAwMDAwMCBuIAowMDAwMDAxMjY3IDAwMDAwIG4gCjAwMDAwMDM0MDggMDAwMDAgbiAKdHJhaWxlcgo8PAovSUQgCls8ZTNlNGE2ODY2YzIyODIzYzg1MGRhMmFkYmUxODgyZTU+PGUzZTRhNjg2NmMyMjgyM2M4NTBkYTJhZGJlMTg4MmU1Pl0KJSBSZXBvcnRMYWIgZ2VuZXJhdGVkIFBERiBkb2N1bWVudCAtLSBkaWdlc3QgKG9wZW5zb3VyY2UpCgovSW5mbyA4IDAgUgovUm9vdCA3IDAgUgovU2l6ZSAxMgo+PgpzdGFydHhyZWYKNTU5MQolJUVPRgo=";
+
+function downloadPDF() {
+  try {
+    const binary = atob(PDF_B64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    const blob = new Blob([bytes], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Bases_Campeonato_Voley_Mixto_Pleyades.pdf';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  } catch(e) {
+    alert('Error al descargar. Por favor intente nuevamente.');
+  }
+}
+</script>
+</body>
+</html>

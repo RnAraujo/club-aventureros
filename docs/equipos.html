@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Equipos Registrados – Club de Aventureros Pléyades</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:      #0d1f3c;
+    --blue:      #1a4a8a;
+    --sky:       #2e7dd1;
+    --gold:      #f0a500;
+    --gold-light:#ffd166;
+    --white:     #f5f7fa;
+    --light-bg:  #e8eff9;
+    --text:      #1a2535;
+    --muted:     #5a6a80;
+    --green:     #1b8a4a;
+    --green-bg:  #e6f4ed;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Barlow',sans-serif; background:var(--white); color:var(--text); overflow-x:hidden; }
+
+  /* ── HERO ── */
+  header {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 60%, #1565c0 100%);
+    color:white; position:relative; overflow:hidden;
+    min-height:280px; display:flex; align-items:center;
+  }
+  header::before {
+    content:''; position:absolute; inset:0;
+    background:
+      radial-gradient(circle at 80% 50%, rgba(240,165,0,.15) 0%, transparent 55%),
+      radial-gradient(circle at 10% 80%, rgba(46,125,209,.25) 0%, transparent 45%);
+  }
+  header::after {
+    content:''; position:absolute; top:0; right:-20px; bottom:0; width:380px; opacity:.06;
+    background-image:
+      repeating-linear-gradient(0deg,  white 0,white 1px,transparent 1px,transparent 28px),
+      repeating-linear-gradient(90deg, white 0,white 1px,transparent 1px,transparent 28px);
+  }
+  .hero-inner {
+    max-width:960px; margin:0 auto; padding:44px 32px 36px;
+    position:relative; z-index:1; display:flex; gap:28px; align-items:center;
+  }
+  .hero-badge {
+    flex-shrink:0; width:90px; height:90px; background:var(--gold); border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-size:44px;
+    box-shadow:0 8px 32px rgba(0,0,0,.35),0 0 0 6px rgba(240,165,0,.3);
+    animation:pulse-badge 3s ease-in-out infinite;
+  }
+  @keyframes pulse-badge {
+    0%,100%{box-shadow:0 8px 32px rgba(0,0,0,.35),0 0 0 6px rgba(240,165,0,.3)}
+    50%{box-shadow:0 8px 32px rgba(0,0,0,.35),0 0 0 14px rgba(240,165,0,.1)}
+  }
+  .hero-text { flex:1; }
+  .hero-eyebrow {
+    font-family:'Barlow Condensed',sans-serif; font-size:13px;
+    letter-spacing:3px; text-transform:uppercase; color:var(--gold-light); margin-bottom:8px;
+  }
+  .hero-title {
+    font-family:'Bebas Neue',sans-serif; font-size:clamp(36px,7vw,64px);
+    line-height:.95; letter-spacing:1px; color:white; margin-bottom:10px;
+  }
+  .hero-title span { color:var(--gold); }
+  .hero-sub { font-size:15px; color:rgba(255,255,255,.75); line-height:1.5; max-width:480px; }
+
+  /* ── INFO STRIP ── */
+  .info-strip {
+    background:var(--navy); color:white;
+    display:flex; justify-content:center; flex-wrap:wrap;
+  }
+  .info-item {
+    display:flex; align-items:center; gap:10px;
+    padding:15px 26px; border-right:1px solid rgba(255,255,255,.08);
+  }
+  .info-item:last-child { border-right:none; }
+  .info-icon { font-size:20px; }
+  .info-label { font-size:11px; text-transform:uppercase; letter-spacing:1.5px; color:var(--gold-light); font-family:'Barlow Condensed',sans-serif; }
+  .info-value { font-size:14px; font-weight:600; }
+
+  /* ── COUNTER BAR ── */
+  .counter-bar {
+    background: var(--light-bg);
+    border-bottom: 2px solid rgba(13,31,60,.08);
+    padding: 20px 24px;
+  }
+  .counter-inner {
+    max-width:960px; margin:0 auto;
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;
+  }
+  .counter-title {
+    font-family:'Bebas Neue',sans-serif; font-size:22px;
+    color:var(--navy); letter-spacing:.5px;
+  }
+  .counter-chips { display:flex; gap:10px; flex-wrap:wrap; }
+  .chip {
+    display:inline-flex; align-items:center; gap:6px;
+    padding:6px 14px; border-radius:20px;
+    font-family:'Barlow Condensed',sans-serif; font-size:13px;
+    font-weight:700; letter-spacing:.5px; text-transform:uppercase;
+  }
+  .chip-total  { background:var(--navy);      color:white; }
+  .chip-open   { background:var(--green-bg);  color:var(--green); border:1px solid var(--green); }
+  .chip-closed { background:#fde8e8;           color:#8b0000; border:1px solid #e57373; }
+
+  /* ── MAIN ── */
+  main { max-width:960px; margin:0 auto; padding:36px 24px 64px; }
+
+  /* ── SEARCH ── */
+  .search-wrap { margin-bottom:28px; position:relative; }
+  .search-wrap input {
+    width:100%; padding:13px 18px 13px 44px;
+    border:1.5px solid rgba(13,31,60,.15); border-radius:6px;
+    font-family:'Barlow',sans-serif; font-size:15px; color:var(--text);
+    background:white; transition:border-color .2s, box-shadow .2s;
+    outline:none;
+  }
+  .search-wrap input:focus {
+    border-color:var(--sky); box-shadow:0 0 0 3px rgba(46,125,209,.15);
+  }
+  .search-wrap .search-icon {
+    position:absolute; left:14px; top:50%; transform:translateY(-50%);
+    font-size:18px; opacity:.45;
+  }
+
+  /* ── TEAM GRID ── */
+  .teams-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+    gap:20px;
+  }
+
+  /* ── TEAM CARD ── */
+  .team-card {
+    background:white; border-radius:10px;
+    border:1px solid rgba(13,31,60,.07);
+    box-shadow:0 2px 12px rgba(13,31,60,.08);
+    overflow:hidden;
+    animation:fadeUp .45s ease both;
+    transition:transform .2s, box-shadow .2s;
+  }
+  .team-card:hover { transform:translateY(-3px); box-shadow:0 8px 28px rgba(13,31,60,.14); }
+  @keyframes fadeUp {
+    from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)}
+  }
+  .team-card:nth-child(1){animation-delay:.04s} .team-card:nth-child(2){animation-delay:.08s}
+  .team-card:nth-child(3){animation-delay:.12s} .team-card:nth-child(4){animation-delay:.16s}
+  .team-card:nth-child(5){animation-delay:.20s} .team-card:nth-child(6){animation-delay:.24s}
+  .team-card:nth-child(7){animation-delay:.28s} .team-card:nth-child(8){animation-delay:.32s}
+
+  .team-header {
+    background:linear-gradient(90deg, var(--navy) 0%, var(--blue) 100%);
+    padding:16px 18px 14px;
+    display:flex; align-items:center; gap:14px;
+  }
+  .team-num {
+    width:36px; height:36px; border-radius:50%;
+    background:var(--gold); color:var(--navy);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Bebas Neue',sans-serif; font-size:18px; flex-shrink:0;
+  }
+  .team-name-block { flex:1; min-width:0; }
+  .team-name {
+    font-family:'Barlow Condensed',sans-serif; font-size:18px;
+    font-weight:700; color:white; white-space:nowrap;
+    overflow:hidden; text-overflow:ellipsis; letter-spacing:.5px;
+  }
+  .team-church-tag {
+    font-size:11.5px; color:rgba(255,255,255,.65); margin-top:2px;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .team-status { flex-shrink:0; }
+  .status-dot {
+    width:10px; height:10px; border-radius:50%;
+    display:inline-block;
+  }
+  .status-dot.confirmed { background:#4cda82; box-shadow:0 0 0 3px rgba(76,218,130,.25); }
+  .status-dot.pending   { background:#f0a500; box-shadow:0 0 0 3px rgba(240,165,0,.25); }
+
+  .team-body { padding:14px 18px 16px; }
+  .team-info-row {
+    display:flex; align-items:center; gap:8px;
+    padding:5px 0; border-bottom:1px solid rgba(13,31,60,.05);
+    font-size:13.5px;
+  }
+  .team-info-row:last-child { border-bottom:none; }
+  .ti-icon { font-size:15px; flex-shrink:0; }
+  .ti-label { color:var(--muted); font-size:12px; min-width:60px; }
+  .ti-value { font-weight:600; color:var(--text); }
+
+  /* badge status in body */
+  .badge-confirmed { background:var(--green-bg); color:var(--green); padding:2px 9px; border-radius:12px; font-size:11px; font-weight:700; }
+  .badge-pending   { background:#fff8e8; color:#7a5c00; padding:2px 9px; border-radius:12px; font-size:11px; font-weight:700; }
+
+  /* ── NO RESULTS ── */
+  #no-results {
+    display:none; text-align:center; padding:60px 20px;
+    color:var(--muted); font-size:16px;
+  }
+  #no-results .nr-icon { font-size:48px; margin-bottom:12px; }
+
+  /* ── WHATSAPP + DOWNLOAD SECTION ── */
+  .cta-section {
+    margin-top:48px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+  }
+  @media(max-width:620px){ .cta-section{ grid-template-columns:1fr; } }
+
+  .cta-card {
+    border-radius:10px; overflow:hidden;
+    box-shadow:0 4px 18px rgba(13,31,60,.12);
+    display:flex; flex-direction:column;
+  }
+  .cta-card-header {
+    padding:18px 22px 14px;
+    display:flex; align-items:center; gap:12px;
+  }
+  .cta-card.wa .cta-card-header  { background:linear-gradient(135deg,#075e54,#128c7e); }
+  .cta-card.pdf .cta-card-header { background:linear-gradient(135deg,var(--navy),var(--blue)); }
+  .cta-card-icon { font-size:32px; }
+  .cta-card-title { font-family:'Bebas Neue',sans-serif; font-size:22px; color:white; letter-spacing:.5px; }
+  .cta-card-sub   { font-size:12.5px; color:rgba(255,255,255,.7); margin-top:1px; }
+  .cta-card-body  { background:white; padding:18px 22px; flex:1; }
+  .cta-card-body p{ font-size:14px; color:var(--muted); line-height:1.55; margin-bottom:14px; }
+
+  .btn-wa {
+    display:inline-flex; align-items:center; gap:9px;
+    background:#25d366; color:white;
+    padding:12px 22px; border-radius:5px;
+    font-family:'Barlow Condensed',sans-serif; font-size:16px;
+    font-weight:700; letter-spacing:1px; text-transform:uppercase;
+    text-decoration:none; border:none; cursor:pointer;
+    transition:background .2s, transform .15s, box-shadow .2s;
+    box-shadow:0 4px 14px rgba(37,211,102,.4);
+  }
+  .btn-wa:hover { background:#1da851; transform:translateY(-2px); box-shadow:0 7px 20px rgba(37,211,102,.45); }
+
+  .btn-download {
+    display:inline-flex; align-items:center; gap:9px;
+    background:var(--gold); color:var(--navy);
+    padding:12px 22px; border-radius:5px;
+    font-family:'Barlow Condensed',sans-serif; font-size:16px;
+    font-weight:700; letter-spacing:1px; text-transform:uppercase;
+    text-decoration:none; border:none; cursor:pointer;
+    transition:background .2s, transform .15s, box-shadow .2s;
+    box-shadow:0 4px 14px rgba(240,165,0,.4);
+  }
+  .btn-download:hover { background:var(--gold-light); transform:translateY(-2px); box-shadow:0 7px 20px rgba(240,165,0,.45); }
+
+  .btn-download svg, .btn-wa svg { width:18px; height:18px; flex-shrink:0; }
+
+  /* ── FOOTER ── */
+  footer {
+    background:var(--navy); color:rgba(255,255,255,.5);
+    text-align:center; padding:26px 20px; font-size:13px;
+  }
+  footer strong { color:var(--gold-light); }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:600px){
+    .hero-inner{ flex-direction:column; text-align:center; padding:32px 20px; }
+    .info-item{ padding:12px 16px; }
+    .counter-inner{ flex-direction:column; align-items:flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header>
+  <div class="hero-inner">
+    <div class="hero-badge">🏐</div>
+    <div class="hero-text">
+      <div class="hero-eyebrow">Día del Aventurero · Puno</div>
+      <h1 class="hero-title">Equipos<br><span>Registrados</span></h1>
+      <p class="hero-sub">Campeonato de Vóley Mixto — Club de Aventureros Pléyades. Consulta aquí los equipos inscritos y su iglesia de pertenencia.</p>
+    </div>
+  </div>
+</header>
+
+<!-- INFO STRIP -->
+<div class="info-strip">
+  <div class="info-item">
+    <span class="info-icon">📅</span>
+    <div>
+      <div class="info-label">Fecha del torneo</div>
+      <div class="info-value">Domingo 24 de mayo</div>
+    </div>
+  </div>
+  <div class="info-item">
+    <span class="info-icon">📍</span>
+    <div>
+      <div class="info-label">Lugar</div>
+      <div class="info-value">Colegio Adventista Puno</div>
+    </div>
+  </div>
+  <div class="info-item">
+    <span class="info-icon">⏰</span>
+    <div>
+      <div class="info-label">Cierre de inscripción</div>
+      <div class="info-value">23 mayo · 21:00 h</div>
+    </div>
+  </div>
+  <div class="info-item">
+    <span class="info-icon">📲</span>
+    <div>
+      <div class="info-label">WhatsApp</div>
+      <div class="info-value">970 139 030</div>
+    </div>
+  </div>
+</div>
+
+<!-- COUNTER BAR -->
+<div class="counter-bar">
+  <div class="counter-inner">
+    <span class="counter-title">Equipos inscritos al campeonato</span>
+    <div class="counter-chips">
+      <span class="chip chip-total">🏐 <span id="total-count">0</span> equipos</span>
+      <span class="chip chip-open">✅ <span id="confirmed-count">0</span> confirmados</span>
+      <span class="chip chip-closed">⏳ <span id="pending-count">0</span> pendientes</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main>
+
+  <!-- SEARCH -->
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="search-input" placeholder="Buscar equipo o iglesia…" oninput="filterTeams()">
+  </div>
+
+  <!-- GRID -->
+  <div class="teams-grid" id="teams-grid"></div>
+  <div id="no-results">
+    <div class="nr-icon">😕</div>
+    No se encontraron equipos con ese nombre o iglesia.
+  </div>
+
+  <!-- CTA SECTION -->
+  <div class="cta-section">
+
+    <!-- WHATSAPP -->
+    <div class="cta-card wa">
+      <div class="cta-card-header">
+        <span class="cta-card-icon">💬</span>
+        <div>
+          <div class="cta-card-title">Inscripciones y Coordinación</div>
+          <div class="cta-card-sub">Contáctanos por WhatsApp</div>
+        </div>
+      </div>
+      <div class="cta-card-body">
+        <p>¿Quieres inscribir tu equipo o tienes alguna consulta? Escríbenos directamente al número de la Comisión de Deportes. Atención hasta el <strong>23 de mayo a las 21:00 h</strong>.</p>
+        <a class="btn-wa" href="https://wa.me/51970139030?text=Hola%2C%20quisiera%20inscribir%20mi%20equipo%20al%20Campeonato%20de%20V%C3%B3ley%20Mixto%20del%20Club%20Pl%C3%A9yades." target="_blank">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.52 3.48A11.93 11.93 0 0 0 12 0C5.37 0 0 5.37 0 12a11.93 11.93 0 0 0 1.64 6.07L0 24l6.14-1.61A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.22-3.48-8.52zM12 22c-1.82 0-3.6-.49-5.15-1.41l-.37-.22-3.64.96.97-3.55-.24-.38A9.94 9.94 0 0 1 2 12C2 6.48 6.48 2 12 2c2.67 0 5.18 1.04 7.07 2.93A9.94 9.94 0 0 1 22 12c0 5.52-4.48 10-10 10zm5.47-7.4c-.3-.15-1.77-.87-2.04-.97s-.47-.15-.67.15-.77.97-.95 1.17-.35.22-.65.07a8.14 8.14 0 0 1-2.39-1.48 8.97 8.97 0 0 1-1.65-2.06c-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52s.2-.3.3-.5.05-.37-.02-.52-.67-1.62-.92-2.22c-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37s-1.04 1.02-1.04 2.48 1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.77-.72 2.02-1.42s.25-1.3.17-1.42c-.07-.12-.27-.2-.57-.35z"/></svg>
+          Escribir al 970 139 030
+        </a>
+      </div>
+    </div>
+
+    <!-- FICHA PDF -->
+    <div class="cta-card pdf">
+      <div class="cta-card-header">
+        <span class="cta-card-icon">📄</span>
+        <div>
+          <div class="cta-card-title">Ficha de Inscripción</div>
+          <div class="cta-card-sub">Descarga, llena y envía por WhatsApp</div>
+        </div>
+      </div>
+      <div class="cta-card-body">
+        <p>Descarga la ficha oficial, completa los datos de tu equipo y jugadores, y envíala al WhatsApp de la comisión antes del cierre de inscripciones.</p>
+        <button class="btn-download" onclick="downloadFicha()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Descargar Ficha PDF
+        </button>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <strong>Club de Aventureros Pléyades</strong> &nbsp;·&nbsp; Comisión de Deportes &nbsp;·&nbsp; Puno, Perú
+</footer>
+
+<script>
+// ── DATOS DE EQUIPOS (ejemplo — reemplazar con datos reales) ──
+const TEAMS = [
+  { name: "Los Rayos",         church: "IASD Central Puno",          players: 10, status: "confirmed" },
+  { name: "Titanes Azules",    church: "IASD Vallecito",              players: 8,  status: "confirmed" },
+  { name: "Pumas del Lago",    church: "IASD San José",               players: 12, status: "confirmed" },
+  { name: "Águilas Blancas",   church: "IASD Bellavista",             players: 9,  status: "confirmed" },
+  { name: "Estrellas del Sur", church: "IASD Huajsapata",             players: 7,  status: "pending"   },
+  { name: "Los Cóndores",      church: "IASD Salcedo",                players: 11, status: "confirmed" },
+  { name: "Rayo Azul",         church: "IASD Mañazo",                 players: 8,  status: "pending"   },
+  { name: "Leones del Altiplano", church: "IASD Chanu Chanu",         players: 6,  status: "pending"   },
+];
+
+// ── RENDER ──
+function renderTeams(list) {
+  const grid = document.getElementById('teams-grid');
+  const noRes = document.getElementById('no-results');
+  grid.innerHTML = '';
+  if (list.length === 0) { noRes.style.display = 'block'; return; }
+  noRes.style.display = 'none';
+
+  list.forEach((t, i) => {
+    const isConf = t.status === 'confirmed';
+    const card = document.createElement('div');
+    card.className = 'team-card';
+    card.style.animationDelay = (i * 0.05) + 's';
+    card.innerHTML = `
+      <div class="team-header">
+        <div class="team-num">${String(i+1).padStart(2,'0')}</div>
+        <div class="team-name-block">
+          <div class="team-name">${t.name}</div>
+          <div class="team-church-tag">⛪ ${t.church}</div>
+        </div>
+        <div class="team-status">
+          <span class="status-dot ${t.status}" title="${isConf ? 'Confirmado' : 'Pendiente'}"></span>
+        </div>
+      </div>
+      <div class="team-body">
+        <div class="team-info-row">
+          <span class="ti-icon">⛪</span>
+          <span class="ti-label">Iglesia</span>
+          <span class="ti-value">${t.church}</span>
+        </div>
+        <div class="team-info-row">
+          <span class="ti-icon">👥</span>
+          <span class="ti-label">Jugadores</span>
+          <span class="ti-value">${t.players} inscritos</span>
+        </div>
+        <div class="team-info-row">
+          <span class="ti-icon">📋</span>
+          <span class="ti-label">Estado</span>
+          <span class="${isConf ? 'badge-confirmed' : 'badge-pending'}">${isConf ? '✅ Confirmado' : '⏳ Pendiente'}</span>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+function updateCounters(list) {
+  document.getElementById('total-count').textContent     = list.length;
+  document.getElementById('confirmed-count').textContent = list.filter(t=>t.status==='confirmed').length;
+  document.getElementById('pending-count').textContent   = list.filter(t=>t.status==='pending').length;
+}
+
+function filterTeams() {
+  const q = document.getElementById('search-input').value.toLowerCase().trim();
+  const filtered = q ? TEAMS.filter(t =>
+    t.name.toLowerCase().includes(q) || t.church.toLowerCase().includes(q)
+  ) : TEAMS;
+  renderTeams(filtered);
+  // counters always reflect total
+}
+
+// ── INIT ──
+updateCounters(TEAMS);
+renderTeams(TEAMS);
+
+// ── FICHA PDF (embebida en base64) ──
+const FICHA_B64 = "JVBERi0xLjQKJZOMi54gUmVwb3J0TGFiIEdlbmVyYXRlZCBQREYgZG9jdW1lbnQgKG9wZW5zb3VyY2UpCjEgMCBvYmoKPDwKL0YxIDIgMCBSIC9GMiAzIDAgUgo+PgplbmRvYmoKMiAwIG9iago8PAovQmFzZUZvbnQgL0hlbHZldGljYSAvRW5jb2RpbmcgL1dpbkFuc2lFbmNvZGluZyAvTmFtZSAvRjEgL1N1YnR5cGUgL1R5cGUxIC9UeXBlIC9Gb250Cj4+CmVuZG9iagozIDAgb2JqCjw8Ci9CYXNlRm9udCAvSGVsdmV0aWNhLUJvbGQgL0VuY29kaW5nIC9XaW5BbnNpRW5jb2RpbmcgL05hbWUgL0YyIC9TdWJ0eXBlIC9UeXBlMSAvVHlwZSAvRm9udAo+PgplbmRvYmoKNCAwIG9iago8PAovQ29udGVudHMgOCAwIFIgL01lZGlhQm94IFsgMCAwIDU5NS4yNzU2IDg0MS44ODk4IF0gL1BhcmVudCA3IDAgUiAvUmVzb3VyY2VzIDw8Ci9Gb250IDEgMCBSIC9Qcm9jU2V0IFsgL1BERiAvVGV4dCAvSW1hZ2VCIC9JbWFnZUMgL0ltYWdlSSBdCj4+IC9Sb3RhdGUgMCAvVHJhbnMgPDwKCj4+IAogIC9UeXBlIC9QYWdlCj4+CmVuZG9iago1IDAgb2JqCjw8Ci9QYWdlTW9kZSAvVXNlTm9uZSAvUGFnZXMgNyAwIFIgL1R5cGUgL0NhdGFsb2cKPj4KZW5kb2JqCjYgMCBvYmoKPDwKL0F1dGhvciAoXChhbm9ueW1vdXNcKSkgL0NyZWF0aW9uRGF0ZSAoRDoyMDI2MDQyNDExMjUwOSswMCcwMCcpIC9DcmVhdG9yIChcKHVuc3BlY2lmaWVkXCkpIC9LZXl3b3JkcyAoKSAvTW9kRGF0ZSAoRDoyMDI2MDQyNDExMjUwOSswMCcwMCcpIC9Qcm9kdWNlciAoUmVwb3J0TGFiIFBERiBMaWJyYXJ5IC0gXChvcGVuc291cmNlXCkpIAogIC9TdWJqZWN0IChcKHVuc3BlY2lmaWVkXCkpIC9UaXRsZSAoXChhbm9ueW1vdXNcKSkgL1RyYXBwZWQgL0ZhbHNlCj4+CmVuZG9iago3IDAgb2JqCjw8Ci9Db3VudCAxIC9LaWRzIFsgNCAwIFIgXSAvVHlwZSAvUGFnZXMKPj4KZW5kb2JqCjggMCBvYmoKPDwKL0ZpbHRlciBbIC9BU0NJSTg1RGVjb2RlIC9GbGF0ZURlY29kZSBdIC9MZW5ndGggMjUyNgo+PgpzdHJlYW0KR2F0big/I1NJVyg1RDtMLydfXjxKMjckOC5KRCZIaDYpWW00Um5bMSF1UC49WidxXFMvXz4vLDQrbU0lSFJPXmJtRltZbUQ7PFZRcSZKdDxyOG5Sbk1CPm4hczApS0oxUExhciRsRmNhKExXQ3NRc1JVQkhNNztyW0E7ZU0pL146KVYkU3MjVEguVlhSU10xTEBAU1gyN111IiFPZyc5c19da01QamN0QVwhaXQ3cFAuRCE8LmtsXSc5VCdVOWtvQHUlWU86O2BFITFlaFVbLjFDaDw9OT0hazI1ZV86VGleaUZxZCQ5WVxGOUdCZ04yTDBmPkljUVEndCZVTVNKNHRxKitmS1htM090aikxXF1WUl9YUmZDQSwsQGlFVmg1TWhVUlVTY29aJGIpQmRVQCIpWjlbWWByRW8/KTxWb21rXVNfc2dvRV0jPTBQbjY3IkphRC45UC9lO0FrWHBmSCcySjNlb0InXCMlZylaUUFAUU1HP05sWVFSNmRYN1BgUm5mTG04TjM9VXFHTjdIJFonQlkmRm1TKiIqSzhSIT1XSV9KQVBzJjM6XyhhYklBZCNsMTdjVk82Z1RQIWg5cidacFojSzhiL2A9ODdNKl5yZzM2JSpVOFNddEFFKjQuKXEtVyIwbzhMV1FeRiFFX2piN05iaHMxK2NrXWhrVl4raj1vM1pMaltYWmUtMT1fMU0+QV0yQ1BidEE0cUtgYSdFUDcvTVduLl1kXiRoZ1NwMCZPVzNUcVVtVUArY0lsWT5yLTk6UClqalBRU2U8VjhFOlEkMERtPXBqO2FkRkshST4iLl1sUFMjM2BsPEcvalFNSUUhaHVgPjVgQjlYaU4hR05UajdUPDRPPltKXipwLiY1UipALXRjY3JJbkRSLlQiclpfPSctMVZ1czAoXFk1YmdyYGxUM25xbEIhPklQODpUaVNTTDxtcnBZLVFfcC4qJSJwWUVHO1AvKl06ZHBgQDVrZixRLy5VZlZBSSJRZm8zZzpfUGYmVlQlTFdVLiplY1AkQiwnSTlXY2BZTXVbXWIqNDQiLi9TbWdLWz9JXjFqTUIlJyxYQDhWQmdsK3NaJCdoM2dcSDglLSdCTkkkPT9MWiIxJGEkJ0k5ckwxZ21eKENGNUotPmpOQDMyJEYqYD85REQ4YDYpYmpeYF42amEmPVZjbyY8M20wSEpuNG5kJCZtMlo0KDMmOEdcQldmbW0iKjojVSwiJEJsX1hmYl0ucGlOJTxkblxCNUchVWJtT2tgb1MpTyxYcztgUjljXmg0QDQ+aixVIVQwJDEmUGdNK1FOLG1KJD1DN2I/JzYnaEBOJmcpKTFwSThYcSswSHJvYj88UztzUFlkcTknNU5kazpmcUk9PlQ7OT84XiojQ2FmKiZ0YFZvQF1bQUErcyY0VzFnOWFSUSU4UkMxaiciYjgwLShbImU+W0IpPkRFNnNkPnNkNURDV0BBcTMpITxyUyNxMVsoI0BcXVM6U1tsQDB0Y2pGcG5TVV1JXHRkWz1RKWMzQihhYVJyYCJvaykvVnImJE8jREUkTVgoRS9FU0NGbmUlJytQOEdWPTMkNy5PXitVbSpjOFU8bS80Yz9nUlprPmdqLjohUjhBJSEpO204UydVc0s+Kk9fMlVfUExIKD4jJ3VtXTYtb0A8YjkjI2soLENsOWpRcWRqLjFoWjFLZW8zJU0rRVZWKFM1WDsydEkvZWtHUEojO0QiKCFnQzglJy9aZ11DKi8xR0RNbSY9Kl9hXyYxQS1wYGwqXEVzVnAtQkhwWlcuRlIsMDdCbCZCMVpEXFZPMDdQVio1aUo9VHAsY2IjPWtSSEwsaERqWmpwMF5YNio6bkw6PUpsc1I0Lj4wQ0BKLmMsXWBCLCUpb1hrT0VRbWEuQFwpQChmJyxtY09aO2NFXWgralEhMDY8J0BcKUA4azRNM0s6Ml5qNG9FbiVSN1c3Q2c1Lk1bUTtdREptWXUvWVpORFo3cih0QydIXDNcZShWajQ6WlVddGQzQ0Q/KlFgXEZZVE1LTnM3UitIKlY/NTJkdF9XampCb1MuPFFEXUpAcEhTRD9WTmQ4PFhiajNmaD9mPkcuPWRgIUZoQFBfMk5GUTo1JipFTigwczxOcmlBJl4vYTFxaD09amwvXWxCQjVNMVM+TyhkTGo8OGJSPGpUU0RaQmgiaWk+TlIrTDp0XV5GPSVIZD5ebipCUyUpWjBuXCphOEInYk1LTlFrLi06XTI3K2w/UWdWXEdwWCxyPklOYWxDNyYqPSM4MGVgOyVHJDk4ZGYoI20jQyosaTI+Wik0aFlyK18rWjhBUCYrJExOSWZlOlssIXM2SWdILF4hZyFsY08zYGEvMz1gWypYYj9nZyhyLVtFXjtpPC4oR0gsYS5GIjMpWDRgYS1qbGBbLG9NPy0qMmcscnJ0UF0wIiJbM1E+Rjc0MnJYLmBhPlpza2FrSDRnOUE3SUxNYlpqW0BvWTxjQFwvV2s4cz1YUShzKFtsYDs5KFlSZFM0Y2wtcDhIXVNldFcnaG1najwrKD1dRyc8P11eYSoubHArJ25IJVAjSmdHW05jQCVMYnBRa29JRzdULGEqRyIqTDFPbDotSVBKay9FVT5DUytqa0lDbTpxaWxYQC9rUjxGc3JqNGlRYkkhSSlgT0pnTUVGczZhXiVYZ0w6V2YjJmA6Jk5TYjJCMmc9OiQ5T0RdLSZycDxBaSgoNVlRRlJIJCNhZjdfQ11qSkcqalhuRmY4VD9XJ1I7MFhXU2MxSSMicVNkclVzZFoxVF0hMUgyXFtlPjJjKiFtSiQqciR0IWclRkFrOyRPPWRxIUswSVU7PUNwZjgwcz1AQj5sRUBsKyJfc1ZSO001KyMlJV5SXXQ0JF9IdSVRXGIzaU89KGxgKTUiJnIrY0k+S0pCJ3NZalo2OmshXzJmU0paO1lZUXFQaVVHPl9QZmxbMnF1Sjk8JUtzPWxYS05gYl8tVSVCVVg2ZkpiLDsmR0g1SzdeJyNcMy5VLkJUW2QzOWFERTNAX2E4QT83TGdTbWc9I2MvaVlNbGM6bz5kU1dfPkZOSlU7RColbUYvQUhFSERCUWYqJGooaGNXKWVtKSpdMUtbXSwhbjJBPTlIayF1LjsoTmU+cWIhT0tVL1FhJ1pDI1tIXlM1Q0g3aFVoVCJOLlhNYyUjRzErPCgxa1BdMj08J2xPVD5zLFIrITNRRWlOUUpULCwhOHVMVCNNNEI5ZkBwOCIxKnFkXS5yWjBRR1slNmM9WnRkI10+VjQ7XSNWXSYmK0JjZENxKiZDUTUqWj8tUUFlLWUmM10/cFUydDgkOS46a0NnJFtRUV4rNUpuKlJPYEJFJiZJMmMnUH4+ZW5kc3RyZWFtCmVuZG9iagp4cmVmCjAgOQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwNjEgMDAwMDAgbiAKMDAwMDAwMDEwMiAwMDAwMCBuIAowMDAwMDAwMjA5IDAwMDAwIG4gCjAwMDAwMDAzMjEgMDAwMDAgbiAKMDAwMDAwMDUyNCAwMDAwMCBuIAowMDAwMDAwNTkyIDAwMDAwIG4gCjAwMDAwMDA4NzIgMDAwMDAgbiAKMDAwMDAwMDkzMSAwMDAwMCBuIAp0cmFpbGVyCjw8Ci9JRCAKWzxhNzcyZDE1ZmZlNGUyZWZlYjVmOWE5M2E4ZjEzODA4Nj48YTc3MmQxNWZmZTRlMmVmZWI1ZjlhOTNhOGYxMzgwODY+XQolIFJlcG9ydExhYiBnZW5lcmF0ZWQgUERGIGRvY3VtZW50IC0tIGRpZ2VzdCAob3BlbnNvdXJjZSkKCi9JbmZvIDYgMCBSCi9Sb290IDUgMCBSCi9TaXplIDkKPj4Kc3RhcnR4cmVmCjM1NDgKJSVFT0YK";
+
+function downloadFicha() {
+  try {
+    const binary = atob(FICHA_B64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    const blob = new Blob([bytes], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Ficha_Inscripcion_Voley_Mixto_Pleyades.pdf';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  } catch(e) {
+    alert('Error al descargar. Por favor intente nuevamente.');
+  }
+}
+</script>
+</body>
+</html>
