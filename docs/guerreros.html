@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>⛅ Guerreros de Oración | Quiz Interactivo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #0b2b2f 0%, #1a3f3a 100%);
+            font-family: 'Segoe UI', 'Poppins', 'Roboto', system-ui, -apple-system, 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+        }
+
+        /* contenedor principal estilo pergamino moderno */
+        .quiz-wrapper {
+            max-width: 950px;
+            width: 100%;
+            background: rgba(255, 248, 235, 0.97);
+            backdrop-filter: blur(2px);
+            border-radius: 3rem;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(210, 180, 140, 0.4) inset;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        /* header con temática de guerreros */
+        .hero {
+            background: #2e241f;
+            background-image: radial-gradient(circle at 10% 20%, rgba(210, 150, 75, 0.15) 2%, transparent 2.5%);
+            background-size: 28px 28px;
+            padding: 1.8rem 2rem;
+            text-align: center;
+            border-bottom: 4px solid #e2b87a;
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+            letter-spacing: -0.5px;
+            color: #ffefcf;
+            text-shadow: 2px 2px 0 #5a3e2b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .hero h1 span {
+            background: #e2b87a;
+            color: #1f2e2a;
+            font-size: 1.2rem;
+            padding: 0.2rem 0.9rem;
+            border-radius: 60px;
+            font-weight: 600;
+        }
+
+        .hero p {
+            color: #f2dec2;
+            margin-top: 0.6rem;
+            font-weight: 500;
+        }
+
+        /* panel de progreso */
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            background: #efe2cf;
+            padding: 0.8rem 2rem;
+            border-bottom: 1px solid #d8be9a;
+            font-weight: 600;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .question-counter {
+            background: #4a3929;
+            color: #ffefcf;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+        }
+
+        .score-area {
+            background: #2e5a4b;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            color: #f9e5b3;
+            font-size: 1rem;
+        }
+
+        .score-area span {
+            font-weight: 800;
+            font-size: 1.4rem;
+            margin-right: 4px;
+            color: #ffd966;
+        }
+
+        /* tarjeta de pregunta */
+        .question-card {
+            padding: 2rem 2rem 1.5rem 2rem;
+            border-bottom: 1px solid #ecdbba;
+        }
+
+        .question-text {
+            font-size: 1.6rem;
+            font-weight: 700;
+            line-height: 1.3;
+            color: #2c241a;
+            margin-bottom: 1.8rem;
+        }
+
+        /* opciones estilo casillas con animación */
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .option {
+            background: #fff7ef;
+            border: 2px solid #ddcdb2;
+            border-radius: 60px;
+            padding: 0.9rem 1.4rem;
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: #2f3a31;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .option:hover:not(.disabled-opt) {
+            background: #ffe6c7;
+            border-color: #c9a87b;
+            transform: translateX(8px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        .prefix {
+            font-weight: 800;
+            background: #cbb786;
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 60px;
+            color: white;
+            background: #a57248;
+        }
+
+        /* estados correcto/incorrecto */
+        .option.correct-highlight {
+            background: #cfe8cf;
+            border-color: #2c7840;
+            box-shadow: 0 0 0 2px #2c7840;
+            cursor: default;
+        }
+
+        .option.wrong-highlight {
+            background: #f4cfce;
+            border-color: #bc5a4c;
+            box-shadow: 0 0 0 2px #bc5a4c;
+            cursor: default;
+            text-decoration: line-through;
+        }
+
+        .disabled-opt {
+            cursor: default;
+            opacity: 0.9;
+            pointer-events: none;
+        }
+
+        /* feedback después de responder */
+        .feedback-message {
+            margin-top: 1.5rem;
+            padding: 1rem 1.2rem;
+            background: #e9dfce;
+            border-radius: 40px;
+            font-size: 1rem;
+            border-left: 8px solid #b88746;
+            color: #2a3b32;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        /* botones de navegación */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 2rem 2rem 2rem;
+            gap: 1rem;
+            background: #f8f0e4;
+        }
+
+        button {
+            background: #70543e;
+            border: none;
+            padding: 0.8rem 1.6rem;
+            font-weight: 700;
+            font-size: 1rem;
+            border-radius: 40px;
+            color: #fff4e6;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        button:active {
+            transform: scale(0.96);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            transform: none;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: #5f8b6f;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #437353;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #b48b5a;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #9c6f45;
+        }
+
+        .restart-btn {
+            background: #3f5c50;
+            margin: 0 auto;
+            display: flex;
+        }
+
+        /* resultados finales */
+        .result-screen {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .result-screen h2 {
+            font-size: 2rem;
+            color: #3c2b1f;
+        }
+
+        .final-score {
+            font-size: 3rem;
+            font-weight: 800;
+            background: #e9cfaa;
+            display: inline-block;
+            padding: 0.3rem 1.3rem;
+            border-radius: 80px;
+            margin: 1rem 0;
+        }
+
+        /* responsive */
+        @media (max-width: 650px) {
+            .question-text {
+                font-size: 1.3rem;
+            }
+            .option {
+                padding: 0.7rem 1rem;
+                font-size: 0.9rem;
+            }
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+            .nav-buttons {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="quiz-wrapper" id="quizApp">
+    <div class="hero">
+        <h1>⚔️ GUERREROS DE ORACIÓN ⚜️ <span>Lección 6</span></h1>
+        <p>Daniel, Enoc, Moisés · El poder de la comunión con Dios</p>
+    </div>
+    <div id="dynamicContent"></div>
+</div>
+
+<script>
+    // ---------- PREGUNTAS BASADAS EN LA LECCIÓN (10 preguntas, 4 alternativas) ----------
+    const questions = [
+        {
+            text: "Según la lección, ¿cuál fue la reacción de Daniel ante el decreto que prohibía orar a cualquier dios u hombre excepto al rey?",
+            options: [
+                "Dejó de orar temporalmente hasta que pasara la amenaza.",
+                "Oró en secreto sin abrir las ventanas.",
+                "Continuó orando tres veces al día con las ventanas abiertas hacia Jerusalén, como solía hacerlo.",
+                "Huyó de Babilonia para salvar su vida."
+            ],
+            correct: 2 // índice 0 basado
+        },
+        {
+            text: "¿Qué frase describe mejor la enseñanza de Elena G. de White sobre la oración en 'El camino a Cristo'?",
+            options: [
+                "Orar es principalmente pedir bendiciones materiales.",
+                "Orar es el acto de abrir nuestro corazón a Dios como a un amigo.",
+                "La oración solo debe realizarse en el templo o en lugares sagrados.",
+                "Dios necesita que le informemos todo porque no conoce nuestras necesidades."
+            ],
+            correct: 1
+        },
+        {
+            text: "¿Qué hizo Moisés cuando Dios le dijo que destruiría a Israel por el becerro de oro?",
+            options: [
+                "Aceptó la propuesta de Dios de formar una gran nación desde él.",
+                "Intercedió fervientemente por el pueblo, recordando el pacto de Dios con Abraham, Isaac y Jacob.",
+                "Permaneció en silencio y dejó que Dios ejecutara el juicio.",
+                "Se alejó del campamento para no ver el castigo."
+            ],
+            correct: 1
+        },
+        {
+            text: "¿Qué lección aprendemos de Enoc según Génesis 5 y el espíritu de profecía?",
+            options: [
+                "Enoc fue un ermitaño que evitaba a la gente para ser santo.",
+                "Enoc caminó con Dios durante 300 años después del nacimiento de Matusalén, reflejando el carácter divino en medio de la corrupción.",
+                "Enoc nunca predicó ni habló a los impíos sobre el juicio.",
+                "Dios llevó a Enoc al cielo porque nunca había pecado ni necesitaba arrepentimiento."
+            ],
+            correct: 1
+        },
+        {
+            text: "¿Cuál de las siguientes posturas NO se menciona explícitamente como ejemplo bíblico en la lección?",
+            options: [
+                "Arrodillarse (Daniel, Jesús, Pedro, Esteban).",
+                "Postrarse con el rostro en tierra.",
+                "Orar con los brazos extendidos en cruz.",
+                "Orar sentado (como David en 2 Samuel 7)."
+            ],
+            correct: 2   // brazos extendidos en cruz no se menciona; sí aparecen las otras.
+        },
+        {
+            text: "En Daniel 2:20-23, después que Dios le reveló el sueño del rey, ¿cuál fue el primer acto de Daniel?",
+            options: [
+                "Corrió a contarle al rey el sueño y su interpretación.",
+                "Bendijo y alabó a Dios, reconociendo que de Él son la sabiduría y el poder.",
+                "Se quedó callado por temor a los magos de Babilonia.",
+                "Pidió una recompensa al rey Nabucodonosor."
+            ],
+            correct: 1
+        },
+        {
+            text: "Moisés intercedió por su hermana María cuando ella habló contra él. ¿Qué libro y capítulo registran la breve pero poderosa oración de Moisés: 'Te ruego, oh Dios, que la sanes ahora'?",
+            options: [
+                "Éxodo 33",
+                "Números 12",
+                "Deuteronomio 9",
+                "Levítico 10"
+            ],
+            correct: 1 // Números 12:13
+        },
+        {
+            text: "¿Qué analogía utiliza la lección para explicar la necesidad de la oración en nuestra relación con Dios?",
+            options: [
+                "Como la respiración para los pulmones.",
+                "Como casi no hablar con tu mejor amigo o cónyuge, la relación se malogra.",
+                "Como un guerrero que afila su espada una vez al mes.",
+                "Como el árbol plantado junto a corrientes de agua."
+            ],
+            correct: 1
+        },
+        {
+            text: "Según la lección, ¿por qué era importante para Daniel orar con las ventanas abiertas hacia Jerusalén?",
+            options: [
+                "Era un requisito legal de los medopersas.",
+                "Demostraba su fidelidad constante a Dios y que ninguna potencia terrenal podía interrumpir su comunión con el Cielo.",
+                "Necesitaba ver el templo para concentrarse.",
+                "Para que los conspiradores no tuvieran dudas de que violaba el decreto."
+            ],
+            correct: 1 // la declaración de lealtad al Rey de reyes
+        },
+        {
+            text: "¿Cuál fue la respuesta de Moisés cuando Dios le dijo: 'Mi presencia irá contigo'?",
+            options: [
+                "Se sintió completamente satisfecho y no pidió nada más.",
+                "Insistió: 'Te ruego que me muestres tu gloria', buscando una comunión más íntima.",
+                "Le pidió a Dios que enviara un ángel en su lugar.",
+                "Le pidió ser liberado de guiar al pueblo."
+            ],
+            correct: 1 // Éxodo 33:18
+        }
+    ];
+
+    // variables de estado
+    let currentIndex = 0;
+    let userAnswers = new Array(questions.length).fill(null); // almacena indice de opcion seleccionada (0-3)
+    let answerStatus = new Array(questions.length).fill(false); // true = ya respondió esta pregunta
+    let score = 0; // contará respuestas correctas cuando se finalice o se actualice
+
+    // función para recalcular el puntaje global basado en userAnswers vs correct
+    function recalcScore() {
+        let correctCount = 0;
+        for (let i = 0; i < questions.length; i++) {
+            if (userAnswers[i] !== null && userAnswers[i] === questions[i].correct) {
+                correctCount++;
+            }
+        }
+        score = correctCount;
+        return score;
+    }
+
+    // MARcar respuesta para la pregunta actual
+    function selectAnswer(optionIndex) {
+        // si ya se respondió esta pregunta, no permitir cambios
+        if (answerStatus[currentIndex]) return;
+
+        // guardar respuesta
+        userAnswers[currentIndex] = optionIndex;
+        answerStatus[currentIndex] = true;
+        // recalcular score global
+        recalcScore();
+        // renderizar la vista actual con feedback
+        renderCurrentQuestion();
+    }
+
+    // ir a siguiente pregunta
+    function nextQuestion() {
+        if (currentIndex < questions.length - 1) {
+            currentIndex++;
+            renderCurrentQuestion();
+        } else {
+            // si ya es la última, mostrar resultados finales
+            renderResults();
+        }
+    }
+
+    function prevQuestion() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            renderCurrentQuestion();
+        }
+    }
+
+    // reiniciar completamente el juego
+    function restartQuiz() {
+        currentIndex = 0;
+        userAnswers = new Array(questions.length).fill(null);
+        answerStatus = new Array(questions.length).fill(false);
+        score = 0;
+        renderCurrentQuestion();
+    }
+
+    // renderizar la pantalla de resultados finales
+    function renderResults() {
+        const total = questions.length;
+        const percentage = Math.round((score / total) * 100);
+        let message = "";
+        if (percentage === 100) message = "¡Guerrero de oración consumado! 🔥🙌";
+        else if (percentage >= 70) message = "¡Buen combatiente! Sigue fortaleciendo tu vida de oración. ✨";
+        else if (percentage >= 50) message = "Vas por buen camino, repasa las lecciones de Daniel, Enoc y Moisés. 📖";
+        else message = "¡Anímate! La oración es un privilegio, sigue aprendiendo de estos héroes de fe. 🌿";
+
+        const html = `
+            <div class="result-screen">
+                <h2>🏆 Batalla concluida 🏆</h2>
+                <div class="final-score">${score} / ${total}</div>
+                <p style="font-size:1.2rem; margin: 1rem 0;">${message}</p>
+                <p style="background:#e7dcc8; padding:0.8rem; border-radius: 2rem; max-width: 80%; margin: 1rem auto;">
+                    “Amo al Señor, porque ha escuchado mi voz y mis súplicas” (Salmo 116:1)
+                </p>
+                <button class="restart-btn" id="restartFinalBtn">⚔️ Renovar Batalla de Oración ⚔️</button>
+            </div>
+        `;
+        const dynamicDiv = document.getElementById("dynamicContent");
+        dynamicDiv.innerHTML = html;
+        const restartBtn = document.getElementById("restartFinalBtn");
+        if (restartBtn) restartBtn.addEventListener("click", () => { restartQuiz(); });
+    }
+
+    // renderizar la pregunta actual y las opciones con estados
+    function renderCurrentQuestion() {
+        const dynamicDiv = document.getElementById("dynamicContent");
+        if (!dynamicDiv) return;
+
+        const q = questions[currentIndex];
+        const alreadyAnswered = answerStatus[currentIndex];
+        const selectedIdx = userAnswers[currentIndex];
+        const isCorrectSelected = (selectedIdx !== null && selectedIdx === q.correct);
+
+        // construir opciones html
+        let optionsHtml = "";
+        const letters = ["A", "B", "C", "D"];
+        q.options.forEach((opt, idx) => {
+            let additionalClass = "";
+            let disabledAttr = alreadyAnswered ? "disabled-opt" : "";
+            let highlightClass = "";
+
+            if (alreadyAnswered) {
+                if (idx === q.correct) {
+                    highlightClass = "correct-highlight";
+                }
+                if (selectedIdx === idx && idx !== q.correct) {
+                    highlightClass = "wrong-highlight";
+                }
+                // si no es correcto ni el seleccionado erroneo, no tiene highlight extra pero se ve deshabilitado
+            }
+
+            const prefix = `<span class="prefix">${letters[idx]}</span>`;
+            optionsHtml += `
+                <div class="option ${highlightClass} ${disabledAttr}" data-opt-index="${idx}">
+                    ${prefix} <span>${escapeHtml(opt)}</span>
+                </div>
+            `;
+        });
+
+        // feedback personalizado según si respondió o no
+        let feedbackHtml = "";
+        if (alreadyAnswered && selectedIdx !== null) {
+            const isCorrect = (selectedIdx === q.correct);
+            const correctAnswerText = q.options[q.correct];
+            if (isCorrect) {
+                feedbackHtml = `<div class="feedback-message">✅ ¡Correcto! <strong>“${escapeHtml(q.options[selectedIdx])}”</strong> es acertado. ¡Sigue firme en la oración! 🙏</div>`;
+            } else {
+                feedbackHtml = `<div class="feedback-message">❌ Incorrecto. La respuesta correcta era: <strong>${escapeHtml(correctAnswerText)}</strong>. Aprendamos de estos guerreros de oración. 📖</div>`;
+            }
+        } else {
+            feedbackHtml = `<div class="feedback-message">🕊️ Selecciona una respuesta. Recuerda: “Orar es abrir el corazón a Dios como a un amigo” (El camino a Cristo).</div>`;
+        }
+
+        // barra de progreso
+        const answeredCount = answerStatus.filter(v => v === true).length;
+        const progressPercent = (answeredCount / questions.length) * 100;
+
+        const statsHtml = `
+            <div class="stats-bar">
+                <div class="question-counter">🔖 Pregunta ${currentIndex+1} / ${questions.length}</div>
+                <div class="score-area">🏅 Aciertos: <span>${score}</span> / ${questions.length}</div>
+                <div style="flex-grow:1; text-align:right; font-size:0.8rem;">⚡ Progreso: ${answeredCount} completadas</div>
+            </div>
+            <div style="height:4px; background:#dccdae; width:100%;"><div style="width:${progressPercent}%; background:#b88746; height:4px; transition:0.2s;"></div></div>
+        `;
+
+        const mainContent = `
+            ${statsHtml}
+            <div class="question-card">
+                <div class="question-text">${escapeHtml(q.text)}</div>
+                <div class="options-list" id="optionsContainer">
+                    ${optionsHtml}
+                </div>
+                ${feedbackHtml}
+            </div>
+            <div class="nav-buttons">
+                <button class="btn-secondary" id="prevBtn" ${currentIndex === 0 ? 'disabled' : ''}>◀ Anterior</button>
+                <button class="btn-primary" id="nextBtn">${currentIndex === questions.length-1 ? '✨ Finalizar ✨' : 'Siguiente ▶'}</button>
+                <button class="restart-btn" id="restartMidBtn" style="background:#7a5a49;">🔄 Reiniciar</button>
+            </div>
+        `;
+
+        dynamicDiv.innerHTML = mainContent;
+
+        // añadir eventos a las opciones
+        const optDivs = document.querySelectorAll('.option');
+        if (optDivs.length) {
+            optDivs.forEach(div => {
+                const idxAttr = div.getAttribute('data-opt-index');
+                if (idxAttr !== null && !answerStatus[currentIndex]) {
+                    div.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const idxVal = parseInt(idxAttr);
+                        selectAnswer(idxVal);
+                    });
+                }
+            });
+        }
+
+        // eventos botones
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const restartMid = document.getElementById('restartMidBtn');
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                // si la pregunta actual no ha sido respondida, mostrar advertencia sutil pero no avanzar
+                if (!answerStatus[currentIndex]) {
+                    // mostrar un mensaje temporal sin recargar
+                    const fbDiv = document.querySelector('.feedback-message');
+                    if (fbDiv) {
+                        fbDiv.style.borderLeftColor = "#bc5a4c";
+                        fbDiv.innerHTML = "⚠️ Por favor, responde la pregunta antes de continuar. ¡La oración requiere decisión! ⚠️";
+                        setTimeout(() => {
+                            if(fbDiv) fbDiv.style.borderLeftColor = "#b88746";
+                        }, 1500);
+                    }
+                    return;
+                }
+                if (currentIndex === questions.length-1) {
+                    renderResults();
+                } else {
+                    nextQuestion();
+                }
+            });
+        }
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                prevQuestion();
+            });
+        }
+        if (restartMid) {
+            restartMid.addEventListener('click', () => {
+                restartQuiz();
+            });
+        }
+    }
+
+    // utilidad para escapar html
+    function escapeHtml(str) {
+        return str.replace(/[&<>]/g, function(m) {
+            if(m === '&') return '&amp;';
+            if(m === '<') return '&lt;';
+            if(m === '>') return '&gt;';
+            return m;
+        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+            return c;
+        });
+    }
+
+    // inicializar aplicación
+    function init() {
+        renderCurrentQuestion();
+    }
+
+    init();
+</script>
+</body>
+</html>
